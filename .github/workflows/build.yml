@@ -1,0 +1,35 @@
+name: Build Project
+
+on:
+  push:
+    branches:
+      - main 
+  pull_request:
+    branches:
+      - main 
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest] 
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x' 
+
+      - name: Restore dependencies
+        run: dotnet restore TelecomApp/TelecomApp.sln
+
+      - name: Build
+        run: dotnet build --configuration Release TelecomApp/TelecomApp.sln
+
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal TelecomApp/TelecomApp.sln
