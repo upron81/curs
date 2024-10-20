@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Table contracts";
+}
+
+@model IEnumerable<TelecomWeb.Models.Contract>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>ContractId</th>
+            <th>ContractDate</th>
+            <th>ContractEndDate</th>
+            <th>Staff.FullName</th>
+            <th>Subscriber.FullName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contract in Model)
+        {
+            <tr>
+                <td>@contract.ContractId</td>
+                <td>@contract.ContractDate</td>
+                <td>@contract.ContractEndDate</td>
+                <td>@contract.Staff.FullName</td>
+                <td>@contract.Subscriber.FullName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

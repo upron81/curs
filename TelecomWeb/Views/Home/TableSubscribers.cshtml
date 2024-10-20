@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Table subscribers";
+}
+
+@model IEnumerable<TelecomWeb.Models.Subscriber>
+
+<h1>@ViewData["Title"]</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>SubscriberId</th>
+            <th>FullName</th>
+            <th>PassportData</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var subscriber in Model)
+        {
+            <tr>
+                <td>@subscriber.SubscriberId</td>
+                <td>@subscriber.FullName</td>
+                <td>@subscriber.PassportData</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+

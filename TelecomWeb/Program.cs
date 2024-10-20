@@ -13,14 +13,12 @@ namespace TelecomWeb
 
             builder.Services.AddDbContext<TelecomDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("TelecomDatabase")));
-            Console.WriteLine("before");
-            Console.WriteLine(builder.Configuration.GetConnectionString("TelecomDatabase"));
-            Console.WriteLine("after");
             builder.Services.AddMemoryCache();
             //builder.Services.AddScoped<ICachedDataService, CachedDataService>();
             // добавление поддержки сессии
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
+            builder.Services.AddScoped<ICachedDataService, CachedDataService>();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -28,6 +26,7 @@ namespace TelecomWeb
             var app = builder.Build();
             app.UseSession();
             app.UseDbInitializer();
+            app.UseResponseCaching(); 
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

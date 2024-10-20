@@ -26,10 +26,30 @@ namespace TelecomWeb.Controllers
             return View();
         }
 
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         [Route("table/tariff")]
-        public IActionResult Table()
+        public IActionResult TableTariff()
         {
             var model = _context.TariffPlans.ToList();
+            return View(model);
+        }
+
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Route("table/subscriber")]
+        public IActionResult TableSubscribers()
+        {
+            var model = _context.Subscribers.ToList();
+            return View(model);
+        }
+
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Route("table/contract")]
+        public IActionResult TableContracts()
+        {
+            var model = _context.Contracts
+                .Include(c => c.Staff)         
+                .Include(c => c.Subscriber)    
+                .ToList();
             return View(model);
         }
 

@@ -9,7 +9,7 @@ DECLARE @Symbol CHAR(52)= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
         @TariffName NVARCHAR(100),
         @TariffPlanID INT,
         @SubscriberID INT,
-        @StaffID INT = 1,  -- один сотрудник
+        @StaffID INT = 20,
         @TariffPlanCount INT = 500,
         @SubscriberCount INT = 500,
         @ContractCount INT = 2000,
@@ -121,6 +121,9 @@ BEGIN
     SET @SubscriberID = CAST(1 + RAND() * (@SubscriberCount - 1) AS INT);
     SET @TariffPlanID = CAST(1 + RAND() * (@TariffPlanCount - 1) AS INT);
     
+    -- Выбор случайного сотрудника
+    SET @StaffID = CAST(1 + RAND() * (SELECT COUNT(*) FROM Staff) AS INT);
+    
     -- Генерация уникального номера телефона
     SET @PhoneNumber = '89' + CAST(CAST(RAND() * 1000000000 AS INT) AS NVARCHAR(10));
     
@@ -143,6 +146,7 @@ BEGIN
         SET @i = @i + 1;
     END;
 END;
+
 
 
 -- Заполнение таблицы звонков
