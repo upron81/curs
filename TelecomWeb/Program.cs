@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TelecomWeb.Middleware;
 using TelecomWeb.Models;
 using TelecomWeb.Services;
@@ -14,29 +16,35 @@ namespace TelecomWeb
             builder.Services.AddDbContext<TelecomDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("TelecomDatabase")));
             builder.Services.AddMemoryCache();
-            //builder.Services.AddScoped<ICachedDataService, CachedDataService>();
-            // добавление поддержки сессии
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
             builder.Services.AddScoped<ICachedDataService, CachedDataService>();
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<TelecomDbContext>()
+                .AddDefaultTokenProviders();
+            builder.Services.AddScoped<IdentitySeedData>();
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
             app.UseSession();
             app.UseDbInitializer();
-            app.UseResponseCaching(); 
+            app.UseResponseCaching();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
-            // Configure the HTTP request pipeline.
+            using (var scope = app.Services.CreateScope())
+            {
+                var initializer = scope.ServiceProvider.GetRequiredService<IdentitySeedData>();
+                initializer.Initialize();
+            }
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
             }
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.MapControllerRoute(

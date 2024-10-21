@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace TelecomWeb.Models;
 
-public partial class TelecomDbContext : DbContext
+public partial class TelecomDbContext : IdentityDbContext<IdentityUser>
+//public partial class TelecomDbContext : DbContext
 {
     public TelecomDbContext()
     {
@@ -47,6 +50,7 @@ public partial class TelecomDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.UseCollation("Cyrillic_General_CI_AS");
 
         modelBuilder.Entity<Call>(entity =>

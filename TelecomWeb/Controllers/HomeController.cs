@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -5,6 +6,7 @@ using TelecomWeb.Models;
 
 namespace TelecomWeb.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -16,6 +18,7 @@ namespace TelecomWeb.Controllers
             _context = context;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
