@@ -25,9 +25,9 @@ public partial class Contract
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
 
-    public virtual Staff Staff { get; set; } = null!;
+    public virtual Staff? Staff { get; set; } = null!;
 
-    public virtual Subscriber Subscriber { get; set; } = null!;
+    public virtual Subscriber? Subscriber { get; set; } = null!;
 
-    public virtual TariffPlan TariffPlan { get; set; } = null!;
+    public virtual TariffPlan? TariffPlan { get; set; } = null!;
 }

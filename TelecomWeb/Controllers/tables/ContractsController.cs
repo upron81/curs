@@ -51,9 +51,9 @@ namespace TelecomWeb.Controllers.tables
         // GET: Contracts/Create
         public IActionResult Create()
         {
-            ViewData["StaffId"] = new SelectList(_context.Staff, "StaffId", "StaffId");
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "SubscriberId", "SubscriberId");
-            ViewData["TariffPlanId"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffPlanId");
+            ViewData["StaffId"] = new SelectList(_context.Staff, "StaffId", "FullName");
+            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "SubscriberId", "FullName");
+            ViewData["TariffPlanId"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffName");
             return View();
         }
 
@@ -75,7 +75,7 @@ namespace TelecomWeb.Controllers.tables
             ViewData["TariffPlanId"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffPlanId", contract.TariffPlanId);
             return View(contract);
         }
-
+        
         // GET: Contracts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -89,15 +89,13 @@ namespace TelecomWeb.Controllers.tables
             {
                 return NotFound();
             }
-            ViewData["StaffId"] = new SelectList(_context.Staff, "StaffId", "StaffId", contract.StaffId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "SubscriberId", "SubscriberId", contract.SubscriberId);
-            ViewData["TariffPlanId"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffPlanId", contract.TariffPlanId);
+            ViewData["StaffName"] = new SelectList(_context.Staff, "StaffId", "FullName", contract.StaffId);
+            ViewData["SubscriberName"] = new SelectList(_context.Subscribers, "SubscriberId", "FullName", contract.SubscriberId);
+            ViewData["TariffPlanName"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffName", contract.TariffPlanId);
             return View(contract);
         }
 
         // POST: Contracts/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ContractId,SubscriberId,TariffPlanId,ContractDate,ContractEndDate,PhoneNumber,StaffId")] Contract contract)
@@ -113,6 +111,7 @@ namespace TelecomWeb.Controllers.tables
                 {
                     _context.Update(contract);
                     await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -125,11 +124,10 @@ namespace TelecomWeb.Controllers.tables
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["StaffId"] = new SelectList(_context.Staff, "StaffId", "StaffId", contract.StaffId);
-            ViewData["SubscriberId"] = new SelectList(_context.Subscribers, "SubscriberId", "SubscriberId", contract.SubscriberId);
-            ViewData["TariffPlanId"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffPlanId", contract.TariffPlanId);
+            ViewData["StaffName"] = new SelectList(_context.Staff, "StaffId", "FullName", contract.StaffId);
+            ViewData["SubscriberName"] = new SelectList(_context.Subscribers, "SubscriberId", "FullName", contract.SubscriberId);
+            ViewData["TariffPlanName"] = new SelectList(_context.TariffPlans, "TariffPlanId", "TariffName", contract.TariffPlanId);
             return View(contract);
         }
 
