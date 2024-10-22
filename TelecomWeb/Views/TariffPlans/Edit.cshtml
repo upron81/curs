@@ -1,0 +1,74 @@
+﻿@model TelecomWeb.Models.TariffPlan
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TariffPlan</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TariffPlanId" />
+            <div class="form-group">
+                <label asp-for="TariffName" class="control-label"></label>
+                <input asp-for="TariffName" class="form-control" />
+                <span asp-validation-for="TariffName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SubscriptionFee" class="control-label"></label>
+                <input asp-for="SubscriptionFee" class="form-control" />
+                <span asp-validation-for="SubscriptionFee" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LocalCallRate" class="control-label"></label>
+                <input asp-for="LocalCallRate" class="form-control" />
+                <span asp-validation-for="LocalCallRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LongDistanceCallRate" class="control-label"></label>
+                <input asp-for="LongDistanceCallRate" class="form-control" />
+                <span asp-validation-for="LongDistanceCallRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InternationalCallRate" class="control-label"></label>
+                <input asp-for="InternationalCallRate" class="form-control" />
+                <span asp-validation-for="InternationalCallRate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPerSecond" /> @Html.DisplayNameFor(model => model.IsPerSecond)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="SmsRate" class="control-label"></label>
+                <input asp-for="SmsRate" class="form-control" />
+                <span asp-validation-for="SmsRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MmsRate" class="control-label"></label>
+                <input asp-for="MmsRate" class="form-control" />
+                <span asp-validation-for="MmsRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataRatePerMb" class="control-label"></label>
+                <input asp-for="DataRatePerMb" class="form-control" />
+                <span asp-validation-for="DataRatePerMb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

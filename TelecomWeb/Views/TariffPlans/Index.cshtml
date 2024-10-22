@@ -1,0 +1,83 @@
+﻿@model IEnumerable<TelecomWeb.Models.TariffPlan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.TariffName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubscriptionFee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LocalCallRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LongDistanceCallRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InternationalCallRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPerSecond)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SmsRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MmsRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataRatePerMb)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TariffName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SubscriptionFee)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LocalCallRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LongDistanceCallRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InternationalCallRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPerSecond)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SmsRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MmsRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataRatePerMb)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TariffPlanId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TariffPlanId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TariffPlanId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

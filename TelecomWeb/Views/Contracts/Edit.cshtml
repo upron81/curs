@@ -1,0 +1,59 @@
+﻿@model TelecomWeb.Models.Contract
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Contract</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ContractId" />
+            <div class="form-group">
+                <label asp-for="SubscriberId" class="control-label"></label>
+                <select asp-for="SubscriberId" class="form-control" asp-items="ViewBag.SubscriberId"></select>
+                <span asp-validation-for="SubscriberId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TariffPlanId" class="control-label"></label>
+                <select asp-for="TariffPlanId" class="form-control" asp-items="ViewBag.TariffPlanId"></select>
+                <span asp-validation-for="TariffPlanId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractDate" class="control-label"></label>
+                <input asp-for="ContractDate" class="form-control" />
+                <span asp-validation-for="ContractDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContractEndDate" class="control-label"></label>
+                <input asp-for="ContractEndDate" class="form-control" />
+                <span asp-validation-for="ContractEndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StaffId" class="control-label"></label>
+                <select asp-for="StaffId" class="form-control" asp-items="ViewBag.StaffId"></select>
+                <span asp-validation-for="StaffId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
