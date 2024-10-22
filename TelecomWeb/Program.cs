@@ -19,8 +19,16 @@ namespace TelecomWeb
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
             builder.Services.AddScoped<ICachedDataService, CachedDataService>();
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+                {
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 4;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                    options.Password.RequireLowercase = false;
+                })
                 .AddEntityFrameworkStores<TelecomDbContext>()
+                .AddDefaultUI()
                 .AddDefaultTokenProviders();
             builder.Services.AddScoped<IdentitySeedData>();
 
@@ -46,6 +54,8 @@ namespace TelecomWeb
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>{endpoints.MapRazorPages();});
 
             app.MapControllerRoute(
                 name: "default",

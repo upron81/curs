@@ -23,8 +23,8 @@ namespace TelecomWeb.Services
             {
                 user = new IdentityUser
                 {
-                    UserName = "admin",
-                    Email = "admin@domain.com"
+                    UserName = "d@d.d",
+                    Email = "d@d.d"
                 };
                 var createResult = _userManager.CreateAsync(user, "pass").Result;
                 if (createResult.Succeeded)
