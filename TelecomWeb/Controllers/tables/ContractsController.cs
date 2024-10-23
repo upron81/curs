@@ -21,10 +21,51 @@ namespace TelecomWeb.Controllers.tables
         }
 
         // GET: Contracts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, string searchSubscriber = "", string searchTariff = "", string searchStaff = "", string searchPhone = "")
         {
-            var telecomDbContext = _context.Contracts.Include(c => c.Staff).Include(c => c.Subscriber).Include(c => c.TariffPlan);
-            return View(await telecomDbContext.ToListAsync());
+            int pageSize = 100;
+
+            var telecomDbContext = _context.Contracts
+                .Include(c => c.Staff)
+                .Include(c => c.Subscriber)
+                .Include(c => c.TariffPlan)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchSubscriber))
+            {
+                telecomDbContext = telecomDbContext.Where(c => c.Subscriber.FullName.Contains(searchSubscriber));
+            }
+
+            if (!string.IsNullOrEmpty(searchTariff))
+            {
+                telecomDbContext = telecomDbContext.Where(c => c.TariffPlan.TariffName.Contains(searchTariff));
+            }
+
+            if (!string.IsNullOrEmpty(searchStaff))
+            {
+                telecomDbContext = telecomDbContext.Where(c => c.Staff.FullName.Contains(searchStaff));
+            }
+
+            if (!string.IsNullOrEmpty(searchPhone))
+            {
+                telecomDbContext = telecomDbContext.Where(c => c.PhoneNumber.Contains(searchPhone));
+            }
+
+            var totalContracts = await telecomDbContext.CountAsync();
+            var contracts = await telecomDbContext
+                .OrderBy(c => c.ContractId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var viewModel = new PaginatedList<Contract>(contracts, totalContracts, pageNumber, pageSize);
+
+            ViewData["searchSubscriber"] = searchSubscriber;
+            ViewData["searchTariff"] = searchTariff;
+            ViewData["searchStaff"] = searchStaff;
+            ViewData["searchPhone"] = searchPhone;
+
+            return View(viewModel);
         }
 
         // GET: Contracts/Details/5

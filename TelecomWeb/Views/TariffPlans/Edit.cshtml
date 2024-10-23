@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form asp-action="Edit" id="tariffPlanForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TariffPlanId" />
             <div class="form-group">
@@ -20,22 +20,22 @@
             </div>
             <div class="form-group">
                 <label asp-for="SubscriptionFee" class="control-label"></label>
-                <input asp-for="SubscriptionFee" class="form-control" />
+                <input asp-for="SubscriptionFee" class="form-control" type="text" />
                 <span asp-validation-for="SubscriptionFee" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LocalCallRate" class="control-label"></label>
-                <input asp-for="LocalCallRate" class="form-control" />
+                <input asp-for="LocalCallRate" class="form-control" type="text" />
                 <span asp-validation-for="LocalCallRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="LongDistanceCallRate" class="control-label"></label>
-                <input asp-for="LongDistanceCallRate" class="form-control" />
+                <input asp-for="LongDistanceCallRate" class="form-control" type="text" />
                 <span asp-validation-for="LongDistanceCallRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="InternationalCallRate" class="control-label"></label>
-                <input asp-for="InternationalCallRate" class="form-control" />
+                <input asp-for="InternationalCallRate" class="form-control" type="text" />
                 <span asp-validation-for="InternationalCallRate" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -45,17 +45,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="SmsRate" class="control-label"></label>
-                <input asp-for="SmsRate" class="form-control" />
+                <input asp-for="SmsRate" class="form-control" type="text" />
                 <span asp-validation-for="SmsRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="MmsRate" class="control-label"></label>
-                <input asp-for="MmsRate" class="form-control" />
+                <input asp-for="MmsRate" class="form-control" type="text" />
                 <span asp-validation-for="MmsRate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="DataRatePerMb" class="control-label"></label>
-                <input asp-for="DataRatePerMb" class="form-control" />
+                <input asp-for="DataRatePerMb" class="form-control" type="text" />
                 <span asp-validation-for="DataRatePerMb" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -70,5 +70,18 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.value = input.value.replace(',', '.');
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(',', '.');
+            });
+        });
+        document.getElementById('tariffPlanForm').addEventListener('submit', function () {
+            const inputs = this.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.value = input.value.replace('.', ',');
+            });
+        });
+    </script>
 }

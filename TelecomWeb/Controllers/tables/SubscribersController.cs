@@ -19,11 +19,40 @@ namespace TelecomWeb.Controllers.tables
         {
             _context = context;
         }
-
-        // GET: Subscribers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, int pageNumber = 1)
         {
-            return View(await _context.Subscribers.ToListAsync());
+            ViewData["NameFilter"] = nameSearch;
+            ViewData["AddressFilter"] = addressSearch;
+            ViewData["PassportFilter"] = passportSearch;
+
+            var subscribers = from s in _context.Subscribers select s;
+
+            if (!string.IsNullOrEmpty(nameSearch))
+            {
+                subscribers = subscribers.Where(s => s.FullName.Contains(nameSearch));
+            }
+
+            if (!string.IsNullOrEmpty(addressSearch))
+            {
+                subscribers = subscribers.Where(s => s.HomeAddress.Contains(addressSearch));
+            }
+
+            if (!string.IsNullOrEmpty(passportSearch))
+            {
+                subscribers = subscribers.Where(s => s.PassportData.Contains(passportSearch));
+            }
+
+            int pageSize = 30;
+            var totalSubscribers = await subscribers.CountAsync();
+            var paginatedList = await subscribers
+                .OrderBy(s => s.SubscriberId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var viewModel = new PaginatedList<Subscriber>(paginatedList, totalSubscribers, pageNumber, pageSize);
+
+            return View(viewModel);
         }
 
         // GET: Subscribers/Details/5

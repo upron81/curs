@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TelecomWeb.Models.TariffPlan>
+﻿@model PaginatedList<TelecomWeb.Models.TariffPlan>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,75 +9,128 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<form method="get" class="form-inline mb-3">
+    <div class="form-group">
+        <input type="text" name="searchTariffName" class="form-control" placeholder="Tariff Name" value="@ViewData["searchTariffName"]" />
+    </div>
+    <div class="form-group mx-sm-2">
+        <input type="text" name="searchSubscriptionFee" class="form-control" placeholder="Subscription Fee" value="@ViewData["searchSubscriptionFee"]" />
+    </div>
+    <div class="form-group mx-sm-2">
+        <input type="text" name="searchLocalCallRate" class="form-control" placeholder="Local Call Rate" value="@ViewData["searchLocalCallRate"]" />
+    </div>
+    <div class="form-group mx-sm-2">
+        <input type="text" name="searchLongDistanceCallRate" class="form-control" placeholder="Long Distance Call Rate" value="@ViewData["searchLongDistanceCallRate"]" />
+    </div>
+    <div class="form-group mx-sm-2">
+        <input type="text" name="searchInternationalCallRate" class="form-control" placeholder="International Call Rate" value="@ViewData["searchInternationalCallRate"]" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TariffName)
+                @Html.DisplayNameFor(model => model.First().TariffName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SubscriptionFee)
+                @Html.DisplayNameFor(model => model.First().SubscriptionFee)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocalCallRate)
+                @Html.DisplayNameFor(model => model.First().LocalCallRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LongDistanceCallRate)
+                @Html.DisplayNameFor(model => model.First().LongDistanceCallRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.InternationalCallRate)
+                @Html.DisplayNameFor(model => model.First().InternationalCallRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsPerSecond)
+                @Html.DisplayNameFor(model => model.First().IsPerSecond)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SmsRate)
+                @Html.DisplayNameFor(model => model.First().SmsRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.MmsRate)
+                @Html.DisplayNameFor(model => model.First().MmsRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataRatePerMb)
+                @Html.DisplayNameFor(model => model.First().DataRatePerMb)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TariffName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SubscriptionFee)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LocalCallRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LongDistanceCallRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InternationalCallRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsPerSecond)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SmsRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MmsRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataRatePerMb)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.TariffPlanId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.TariffPlanId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.TariffPlanId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TariffName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubscriptionFee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LocalCallRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LongDistanceCallRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InternationalCallRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsPerSecond)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SmsRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MmsRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataRatePerMb)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.TariffPlanId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.TariffPlanId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TariffPlanId">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<div class="text-center">
+    <ul class="pagination">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchTariffName="@ViewData["searchTariffName"]"
+               asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+               asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+               asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Previous</a>
+        </li>
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
+                   asp-route-searchTariffName="@ViewData["searchTariffName"]"
+                   asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+                   asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+                   asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+                   asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">@i</a>
+            </li>
+        }
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchTariffName="@ViewData["searchTariffName"]"
+               asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+               asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+               asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Next</a>
+        </li>
+    </ul>
+</div>

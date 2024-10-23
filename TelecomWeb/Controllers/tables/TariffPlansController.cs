@@ -21,9 +21,54 @@ namespace TelecomWeb.Controllers.tables
         }
 
         // GET: TariffPlans
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber = 1, string searchTariffName = "", string searchSubscriptionFee = "", string searchLocalCallRate = "", string searchLongDistanceCallRate = "", string searchInternationalCallRate = "")
         {
-            return View(await _context.TariffPlans.ToListAsync());
+            int pageSize = 30;
+
+            var telecomDbContext = _context.TariffPlans.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTariffName))
+            {
+                telecomDbContext = telecomDbContext.Where(t => t.TariffName.Contains(searchTariffName));
+            }
+
+            if (decimal.TryParse(searchSubscriptionFee, out decimal subscriptionFee))
+            {
+                telecomDbContext = telecomDbContext.Where(t => t.SubscriptionFee == subscriptionFee);
+            }
+
+            if (decimal.TryParse(searchLocalCallRate, out decimal localCallRate))
+            {
+                telecomDbContext = telecomDbContext.Where(t => t.LocalCallRate == localCallRate);
+            }
+
+            if (decimal.TryParse(searchLongDistanceCallRate, out decimal longDistanceCallRate))
+            {
+                telecomDbContext = telecomDbContext.Where(t => t.LongDistanceCallRate == longDistanceCallRate);
+            }
+
+            if (decimal.TryParse(searchInternationalCallRate, out decimal internationalCallRate))
+            {
+                telecomDbContext = telecomDbContext.Where(t => t.InternationalCallRate == internationalCallRate);
+            }
+
+            var totalTariffPlans = await telecomDbContext.CountAsync();
+
+            var tariffPlans = await telecomDbContext
+                .OrderBy(t => t.TariffPlanId)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var viewModel = new PaginatedList<TariffPlan>(tariffPlans, totalTariffPlans, pageNumber, pageSize);
+
+            ViewData["searchTariffName"] = searchTariffName;
+            ViewData["searchSubscriptionFee"] = searchSubscriptionFee;
+            ViewData["searchLocalCallRate"] = searchLocalCallRate;
+            ViewData["searchLongDistanceCallRate"] = searchLongDistanceCallRate;
+            ViewData["searchInternationalCallRate"] = searchInternationalCallRate;
+
+            return View(viewModel);
         }
 
         // GET: TariffPlans/Details/5
