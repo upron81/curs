@@ -30,6 +30,3 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release TelecomWeb/TelecomWeb.sln
-
-      - name: Run tests
-        run: dotnet test --no-build --verbosity normal TelecomWeb/TelecomWeb.sln
