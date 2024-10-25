@@ -1,43 +1,45 @@
 ﻿@model TelecomWeb.Models.Subscriber
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать";
 }
 
-<h1>Create</h1>
+<h1>Создать</h1>
 
-<h4>Subscriber</h4>
+<h4>Абонент</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
+                <label asp-for="FullName" class="control-label">ФИО</label>
                 <input asp-for="FullName" class="form-control" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HomeAddress" class="control-label"></label>
+                <label asp-for="HomeAddress" class="control-label">Домашний адрес</label>
                 <input asp-for="HomeAddress" class="form-control" />
                 <span asp-validation-for="HomeAddress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PassportData" class="control-label"></label>
+                <label asp-for="PassportData" class="control-label">Паспортные данные</label>
                 <input asp-for="PassportData" class="form-control" />
                 <span asp-validation-for="PassportData" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад к списку</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

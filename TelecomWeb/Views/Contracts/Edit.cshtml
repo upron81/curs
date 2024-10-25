@@ -1,12 +1,12 @@
 ﻿@model TelecomWeb.Models.Contract
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h1>Edit</h1>
+<h1>Редактировать</h1>
 
-<h4>Contract</h4>
+<h4>Контракт</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,47 +14,49 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ContractId" />
             <div class="form-group">
-                <label asp-for="SubscriberId" class="control-label"></label>
+                <label asp-for="SubscriberId" class="control-label">Сотрудник</label>
                 <select asp-for="SubscriberId" class="form-control" asp-items="ViewBag.SubscriberName"></select>
                 <span asp-validation-for="SubscriberId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TariffPlanId" class="control-label"></label>
+                <label asp-for="TariffPlanId" class="control-label">Тариф</label>
                 <select asp-for="TariffPlanId" class="form-control" asp-items="ViewBag.TariffPlanName"></select>
                 <span asp-validation-for="TariffPlanId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContractDate" class="control-label"></label>
+                <label asp-for="ContractDate" class="control-label">Дата создания контракта</label>
                 <input asp-for="ContractDate" class="form-control" type="date" />
                 <span asp-validation-for="ContractDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ContractEndDate" class="control-label"></label>
+                <label asp-for="ContractEndDate" class="control-label">Дата окончания контракта</label>
                 <input asp-for="ContractEndDate" class="form-control" type="date" />
                 <span asp-validation-for="ContractEndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label"></label>
+                <label asp-for="PhoneNumber" class="control-label">Номер телефона</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StaffId" class="control-label"></label>
+                <label asp-for="StaffId" class="control-label">Сотрудник для обслуживания</label>
                 <select asp-for="StaffId" class="form-control" asp-items="ViewBag.StaffName"></select>
                 <span asp-validation-for="StaffId" class="text-danger"></span>
             </div>
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться к списку</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

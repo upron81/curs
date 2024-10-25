@@ -2,13 +2,13 @@
 @model IEnumerable<IdentityUser>
 
 @{
-    ViewData["Title"] = "Users";
+    ViewData["Title"] = "Пользователи";
 }
 
-<h1>Users</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New User</a>
+    <a asp-action="Create">Создать</a>
 </p>
 <table class="table">
     <thead>

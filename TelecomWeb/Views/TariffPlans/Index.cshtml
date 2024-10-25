@@ -1,64 +1,46 @@
 ﻿@model PaginatedList<TelecomWeb.Models.TariffPlan>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Список тарифов";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать</a>
 </p>
 
 <form method="get" class="form-inline mb-3">
     <div class="form-group">
-        <input type="text" name="searchTariffName" class="form-control" placeholder="Tariff Name" value="@ViewData["searchTariffName"]" />
+        <input type="text" name="searchTariffName" class="form-control" placeholder="Название тарифа" value="@ViewData["searchTariffName"]" />
     </div>
     <div class="form-group mx-sm-2">
-        <input type="text" name="searchSubscriptionFee" class="form-control" placeholder="Subscription Fee" value="@ViewData["searchSubscriptionFee"]" />
+        <input type="text" name="searchSubscriptionFee" class="form-control" placeholder="Абонентская плата" value="@ViewData["searchSubscriptionFee"]" />
     </div>
     <div class="form-group mx-sm-2">
-        <input type="text" name="searchLocalCallRate" class="form-control" placeholder="Local Call Rate" value="@ViewData["searchLocalCallRate"]" />
+        <input type="text" name="searchLocalCallRate" class="form-control" placeholder="Местная связь" value="@ViewData["searchLocalCallRate"]" />
     </div>
     <div class="form-group mx-sm-2">
-        <input type="text" name="searchLongDistanceCallRate" class="form-control" placeholder="Long Distance Call Rate" value="@ViewData["searchLongDistanceCallRate"]" />
+        <input type="text" name="searchLongDistanceCallRate" class="form-control" placeholder="Междугородная связь" value="@ViewData["searchLongDistanceCallRate"]" />
     </div>
     <div class="form-group mx-sm-2">
-        <input type="text" name="searchInternationalCallRate" class="form-control" placeholder="International Call Rate" value="@ViewData["searchInternationalCallRate"]" />
+        <input type="text" name="searchInternationalCallRate" class="form-control" placeholder="Роуминг" value="@ViewData["searchInternationalCallRate"]" />
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn btn-primary">Поиск</button>
 </form>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.First().TariffName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().SubscriptionFee)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().LocalCallRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().LongDistanceCallRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().InternationalCallRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().IsPerSecond)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().SmsRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().MmsRate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.First().DataRatePerMb)
-            </th>
+            <th>Название</th>
+            <th>Абонентская плата</th>
+            <th>Местная связь</th>
+            <th>Междугородная связь</th>
+            <th>Роуминг</th>
+            <th>Посекундная тарификация</th>
+            <th>СМС</th>
+            <th>ММС</th>
+            <th>1мб</th>
             <th></th>
         </tr>
     </thead>
@@ -66,37 +48,19 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.TariffName)</td>
+                <td>@Html.DisplayFor(modelItem => item.SubscriptionFee)</td>
+                <td>@Html.DisplayFor(modelItem => item.LocalCallRate)</td>
+                <td>@Html.DisplayFor(modelItem => item.LongDistanceCallRate)</td>
+                <td>@Html.DisplayFor(modelItem => item.InternationalCallRate)</td>
+                <td>@Html.DisplayFor(modelItem => item.IsPerSecond)</td>
+                <td>@Html.DisplayFor(modelItem => item.SmsRate)</td>
+                <td>@Html.DisplayFor(modelItem => item.MmsRate)</td>
+                <td>@Html.DisplayFor(modelItem => item.DataRatePerMb)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.TariffName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SubscriptionFee)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LocalCallRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.LongDistanceCallRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.InternationalCallRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsPerSecond)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SmsRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.MmsRate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DataRatePerMb)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.TariffPlanId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.TariffPlanId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.TariffPlanId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.TariffPlanId">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.TariffPlanId">Детали</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TariffPlanId">Удалить</a>
                 </td>
             </tr>
         }
@@ -111,7 +75,7 @@
                asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
                asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
-               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Previous</a>
+               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Предыдущая</a>
         </li>
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
@@ -130,7 +94,7 @@
                asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
                asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
-               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Next</a>
+               asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Следующая</a>
         </li>
     </ul>
 </div>

@@ -1,73 +1,85 @@
 ﻿@model TelecomWeb.Models.TariffPlan
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Создать";
 }
 
-<h1>Create</h1>
+<h1>Создать</h1>
 
-<h4>TariffPlan</h4>
+<h4>Тарифный план</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="TariffName" class="control-label"></label>
+                <label asp-for="TariffName" class="control-label">Название</label>
                 <input asp-for="TariffName" class="form-control" />
                 <span asp-validation-for="TariffName" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="SubscriptionFee" class="control-label"></label>
+                <label asp-for="SubscriptionFee" class="control-label">Абонентская плата</label>
                 <input asp-for="SubscriptionFee" class="form-control" />
                 <span asp-validation-for="SubscriptionFee" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="LocalCallRate" class="control-label"></label>
+                <label asp-for="LocalCallRate" class="control-label">Местная связь</label>
                 <input asp-for="LocalCallRate" class="form-control" />
                 <span asp-validation-for="LocalCallRate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="LongDistanceCallRate" class="control-label"></label>
+                <label asp-for="LongDistanceCallRate" class="control-label">Междугородная связь</label>
                 <input asp-for="LongDistanceCallRate" class="form-control" />
                 <span asp-validation-for="LongDistanceCallRate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="InternationalCallRate" class="control-label"></label>
+                <label asp-for="InternationalCallRate" class="control-label">Роуминг</label>
                 <input asp-for="InternationalCallRate" class="form-control" />
                 <span asp-validation-for="InternationalCallRate" class="text-danger"></span>
             </div>
+
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPerSecond" /> @Html.DisplayNameFor(model => model.IsPerSecond)
+                    <input class="form-check-input" asp-for="IsPerSecond" /> Посекундная тарификация
                 </label>
             </div>
+
             <div class="form-group">
-                <label asp-for="SmsRate" class="control-label"></label>
+                <label asp-for="SmsRate" class="control-label">СМС</label>
                 <input asp-for="SmsRate" class="form-control" />
                 <span asp-validation-for="SmsRate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="MmsRate" class="control-label"></label>
+                <label asp-for="MmsRate" class="control-label">ММС</label>
                 <input asp-for="MmsRate" class="form-control" />
                 <span asp-validation-for="MmsRate" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="DataRatePerMb" class="control-label"></label>
+                <label asp-for="DataRatePerMb" class="control-label">1мб</label>
                 <input asp-for="DataRatePerMb" class="form-control" />
                 <span asp-validation-for="DataRatePerMb" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Создать" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Назад к списку</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

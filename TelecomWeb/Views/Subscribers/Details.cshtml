@@ -1,36 +1,36 @@
 ﻿@model TelecomWeb.Models.Subscriber
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности";
 }
 
-<h1>Details</h1>
+<h1>Подробности</h1>
 
 <div>
-    <h4>Subscriber</h4>
+    <h4>Абонент</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
+        <dt class="col-sm-2">
+            ФИО
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.HomeAddress)
+        <dt class="col-sm-2">
+            Домашний адрес
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.HomeAddress)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PassportData)
+        <dt class="col-sm-2">
+            Паспортные данные
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PassportData)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.SubscriberId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.SubscriberId">Редактировать</a> |
+    <a asp-action="Index">Назад к списку</a>
 </div>

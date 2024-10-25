@@ -1,34 +1,34 @@
 ﻿@model PaginatedList<TelecomWeb.Models.Subscriber>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Абоненты";
 }
 
-<h1>Index</h1>
+<h1>@ViewData["Title"]</h1>
 
 <form method="get" asp-action="Index" class="form-inline mb-3">
     <div class="form-group mr-2">
-        <input type="text" name="nameSearch" value="@ViewData["NameFilter"]" class="form-control" placeholder="Search by name" />
+        <input type="text" name="nameSearch" value="@ViewData["NameFilter"]" class="form-control" placeholder="Поиск по имени" />
     </div>
     <div class="form-group mr-2">
-        <input type="text" name="addressSearch" value="@ViewData["AddressFilter"]" class="form-control" placeholder="Search by address" />
+        <input type="text" name="addressSearch" value="@ViewData["AddressFilter"]" class="form-control" placeholder="Поиск по адресу" />
     </div>
     <div class="form-group mr-2">
-        <input type="text" name="passportSearch" value="@ViewData["PassportFilter"]" class="form-control" placeholder="Search by passport data" />
+        <input type="text" name="passportSearch" value="@ViewData["PassportFilter"]" class="form-control" placeholder="Поиск по паспортным данным" />
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
+    <button type="submit" class="btn btn-primary">Поиск</button>
 </form>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Создать</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>@Html.DisplayNameFor(model => model.First().FullName)</th>
-            <th>@Html.DisplayNameFor(model => model.First().HomeAddress)</th>
-            <th>@Html.DisplayNameFor(model => model.First().PassportData)</th>
+            <th>ФИО</th>
+            <th>Домашний адрес</th>
+            <th>Паспортные данные</th>
             <th></th>
         </tr>
     </thead>
@@ -40,9 +40,9 @@
                 <td>@Html.DisplayFor(modelItem => item.HomeAddress)</td>
                 <td>@Html.DisplayFor(modelItem => item.PassportData)</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.SubscriberId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.SubscriberId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.SubscriberId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.SubscriberId">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.SubscriberId">Подробности</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SubscriberId">Удалить</a>
                 </td>
             </tr>
         }
@@ -52,7 +52,7 @@
 <div class="text-center">
     <ul class="pagination">
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]" asp-route-passportSearch="@ViewData["PassportFilter"]">Previous</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]" asp-route-passportSearch="@ViewData["PassportFilter"]">Назад</a>
         </li>
         @for (int i = 1; i <= Model.TotalPages; i++)
         {
@@ -61,7 +61,7 @@
             </li>
         }
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]" asp-route-passportSearch="@ViewData["PassportFilter"]">Next</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]" asp-route-passportSearch="@ViewData["PassportFilter"]">Вперёд</a>
         </li>
     </ul>
 </div>
