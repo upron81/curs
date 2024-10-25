@@ -1,36 +1,36 @@
 ﻿@model TelecomWeb.Models.Staff
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Подробности";
 }
 
-<h1>Details</h1>
+<h1>Подробности</h1>
 
 <div>
-    <h4>Staff</h4>
+    <h4>Сотрудник</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FullName)
+        <dt class="col-sm-2">
+            ФИО
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FullName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Education)
+        <dt class="col-sm-2">
+            Образование
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Education)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Position)
+        <dt class="col-sm-2">
+            Должность
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Position.PositionId)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.StaffId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.StaffId">Редактировать</a> |
+    <a asp-action="Index">Вернуться к списку</a>
 </div>

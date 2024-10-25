@@ -49,7 +49,7 @@ namespace TelecomWeb.Controllers.tables
         // GET: Staffs/Create
         public IActionResult Create()
         {
-            ViewData["PositionId"] = new SelectList(_context.StaffPositions, "PositionId", "PositionId");
+            ViewData["PositionName"] = new SelectList(_context.StaffPositions, "PositionId", "PositionName");
             return View();
         }
 
@@ -66,7 +66,7 @@ namespace TelecomWeb.Controllers.tables
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PositionId"] = new SelectList(_context.StaffPositions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionName"] = new SelectList(_context.StaffPositions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 
@@ -83,7 +83,7 @@ namespace TelecomWeb.Controllers.tables
             {
                 return NotFound();
             }
-            ViewData["PositionId"] = new SelectList(_context.StaffPositions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionName"] = new SelectList(_context.StaffPositions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 
@@ -119,7 +119,7 @@ namespace TelecomWeb.Controllers.tables
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["PositionId"] = new SelectList(_context.StaffPositions, "PositionId", "PositionId", staff.PositionId);
+            ViewData["PositionName"] = new SelectList(_context.StaffPositions, "PositionId", "PositionName", staff.PositionId);
             return View(staff);
         }
 

@@ -15,5 +15,5 @@ public partial class Staff
 
     public virtual ICollection<Contract> Contracts { get; set; } = new List<Contract>();
 
-    public virtual StaffPosition Position { get; set; } = null!;
+    public virtual StaffPosition? Position { get; set; } = null!;
 }

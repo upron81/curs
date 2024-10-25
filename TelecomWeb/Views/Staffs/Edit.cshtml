@@ -1,12 +1,12 @@
 ﻿@model TelecomWeb.Models.Staff
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h1>Edit</h1>
+<h1>Редактировать</h1>
 
-<h4>Staff</h4>
+<h4>Сотрудник</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,31 +14,33 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="StaffId" />
             <div class="form-group">
-                <label asp-for="FullName" class="control-label"></label>
+                <label asp-for="FullName" class="control-label">ФИО</label>
                 <input asp-for="FullName" class="form-control" />
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="PositionId" class="control-label"></label>
-                <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionId"></select>
+                <label asp-for="PositionId" class="control-label">Должность</label>
+                <select asp-for="PositionId" class="form-control" asp-items="ViewBag.PositionName"></select>
                 <span asp-validation-for="PositionId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Education" class="control-label"></label>
+                <label asp-for="Education" class="control-label">Образование</label>
                 <input asp-for="Education" class="form-control" />
                 <span asp-validation-for="Education" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться к списку</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
