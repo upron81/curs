@@ -19,6 +19,7 @@ namespace TelecomWeb.Controllers.tables
         {
             _context = context;
         }
+
         public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, int pageNumber = 1)
         {
             ViewData["NameFilter"] = nameSearch;

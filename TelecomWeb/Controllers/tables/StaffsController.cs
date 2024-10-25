@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using TelecomWeb.Models;
 
-namespace TelecomWeb.Controllers
+namespace TelecomWeb.Controllers.tables
 {
     [Authorize]
     public class StaffsController : Controller
