@@ -1,0 +1,110 @@
+﻿@model PaginatedList<TelecomWeb.Models.Message>
+
+@{
+    ViewData["Title"] = "Сообщения";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form method="get" asp-action="Index" class="form-inline mb-3">
+    <div class="form-group mr-2">
+        <input type="text" name="dateSearch" value="@ViewData["DateFilter"]" class="form-control" placeholder="Поиск по дате" />
+    </div>
+    <div class="form-group mr-2">
+        <input type="text" name="phoneNumberSearch" value="@ViewData["PhoneNumberFilter"]" class="form-control" placeholder="Поиск по номеру" />
+    </div>
+    <div class="form-group mr-2">
+        <div>
+            <label>
+                <input type="radio" name="isMmsSearch" value="true" @(ViewData["IsMmsFilter"]?.ToString() == "true" ? "checked" : "") /> Только MMS
+            </label>
+            <label>
+                <input type="radio" name="isMmsSearch" value="false" @(ViewData["IsMmsFilter"]?.ToString() == "false" ? "checked" : "") /> Только SMS
+            </label>
+            <label>
+                <input type="radio" name="isMmsSearch" value="" @(ViewData["IsMmsFilter"] == null ? "checked" : "") /> Все типы
+            </label>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Поиск</button>
+</form>
+
+<p>
+    <a asp-action="Create">Создать новое сообщение</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата отправки</th>
+            <th>Тип сообщения</th>
+            <th>Номер телефона</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.MessageDate)</td>
+                <td>@(item.IsMms ? "MMS" : "SMS")</td>
+                <td>@Html.DisplayFor(modelItem => item.Contract.PhoneNumber)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.MessageId">Редактировать</a> |
+                    <a asp-action="Details" asp-route-id="@item.MessageId">Подробности</a> |
+                    <a asp-action="Delete" asp-route-id="@item.MessageId">Удалить</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="text-center">
+    <ul class="pagination">
+        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-dateSearch="@ViewData["DateFilter"]"
+               asp-route-phoneNumberSearch="@ViewData["PhoneNumberFilter"]"
+               asp-route-isMmsSearch="@ViewData["IsMmsFilter"]">Назад</a>
+        </li>
+
+        @if (Model.PageIndex > 3)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="1"
+                   asp-route-dateSearch="@ViewData["DateFilter"]"
+                   asp-route-phoneNumberSearch="@ViewData["PhoneNumberFilter"]"
+                   asp-route-isMmsSearch="@ViewData["IsMmsFilter"]">1</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        }
+
+        @for (int i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
+        {
+            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
+                   asp-route-dateSearch="@ViewData["DateFilter"]"
+                   asp-route-phoneNumberSearch="@ViewData["PhoneNumberFilter"]"
+                   asp-route-isMmsSearch="@ViewData["IsMmsFilter"]">@i</a>
+            </li>
+        }
+
+        @if (Model.PageIndex < Model.TotalPages - 2)
+        {
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.TotalPages)"
+                   asp-route-dateSearch="@ViewData["DateFilter"]"
+                   asp-route-phoneNumberSearch="@ViewData["PhoneNumberFilter"]"
+                   asp-route-isMmsSearch="@ViewData["IsMmsFilter"]">@Model.TotalPages</a>
+            </li>
+        }
+
+        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-dateSearch="@ViewData["DateFilter"]"
+               asp-route-phoneNumberSearch="@ViewData["PhoneNumberFilter"]"
+               asp-route-isMmsSearch="@ViewData["IsMmsFilter"]">Вперёд</a>
+        </li>
+    </ul>
+</div>

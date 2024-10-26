@@ -13,5 +13,5 @@ public partial class Call
 
     public int CallDuration { get; set; }
 
-    public virtual Contract Contract { get; set; } = null!;
+    public virtual Contract? Contract { get; set; } = null!;
 }
