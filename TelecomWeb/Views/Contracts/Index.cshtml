@@ -73,16 +73,44 @@
 <div class="text-center">
     <ul class="pagination">
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)" asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]" asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">Предыдущая</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]"
+               asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">Предыдущая</a>
         </li>
-        @for (int i = 1; i <= Model.TotalPages; i++)
+
+        @if (Model.PageIndex > 3)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="1"
+                   asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]"
+                   asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">1</a>
+            </li>
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        }
+
+        @for (int i = Math.Max(1, Model.PageIndex - 2); i <= Math.Min(Model.TotalPages, Model.PageIndex + 2); i++)
         {
             <li class="page-item @(i == Model.PageIndex ? "active" : "")">
-                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i" asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]" asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">@i</a>
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
+                   asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]"
+                   asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">@i</a>
             </li>
         }
+
+        @if (Model.PageIndex < Model.TotalPages - 2)
+        {
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+            <li class="page-item">
+                <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.TotalPages)"
+                   asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]"
+                   asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">@Model.TotalPages</a>
+            </li>
+        }
+
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
-            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)" asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]" asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">Следующая</a>
+            <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchSubscriber="@ViewData["searchSubscriber"]" asp-route-searchTariff="@ViewData["searchTariff"]"
+               asp-route-searchStaff="@ViewData["searchStaff"]" asp-route-searchPhone="@ViewData["searchPhone"]">Следующая</a>
         </li>
     </ul>
 </div>

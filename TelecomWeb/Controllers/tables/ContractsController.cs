@@ -23,7 +23,7 @@ namespace TelecomWeb.Controllers.tables
         // GET: Contracts
         public async Task<IActionResult> Index(int pageNumber = 1, string searchSubscriber = "", string searchTariff = "", string searchStaff = "", string searchPhone = "")
         {
-            int pageSize = 100;
+            int pageSize = 30;
 
             var telecomDbContext = _context.Contracts
                 .Include(c => c.Staff)
