@@ -1,0 +1,62 @@
+﻿@model TelecomWeb.Models.InternetUsage
+
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h1>Редактирование</h1>
+
+<h4>Использование интернета</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" id="internetUsageForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="UsageId" />
+            <div class="form-group">
+                <label asp-for="ContractId" class="control-label">Номер телефона</label>
+                <select asp-for="ContractId" class="form-control" asp-items="ViewBag.ContractId"></select>
+                <span asp-validation-for="ContractId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UsageDate" class="control-label">Дата</label>
+                <input asp-for="UsageDate" class="form-control" />
+                <span asp-validation-for="UsageDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataSentMb" class="control-label">Отправлено (МБ)</label>
+                <input asp-for="DataSentMb" class="form-control" type="text" />
+                <span asp-validation-for="DataSentMb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataReceivedMb" class="control-label">Получено (МБ)</label>
+                <input asp-for="DataReceivedMb" class="form-control" type="text" />
+                <span asp-validation-for="DataReceivedMb" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Назад к списку</a>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.value = input.value.replace(',', '.');
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(',', '.');
+            });
+        });
+        document.getElementById('internetUsageForm').addEventListener('submit', function () {
+            const inputs = this.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.value = input.value.replace('.', ',');
+            });
+        });
+    </script>
+}

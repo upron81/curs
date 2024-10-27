@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="tariffPlanForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
@@ -21,7 +21,7 @@
 
             <div class="form-group">
                 <label asp-for="SubscriptionFee" class="control-label">Абонентская плата</label>
-                <input asp-for="SubscriptionFee" class="form-control" />
+                <input asp-for="SubscriptionFee" class="form-control" type="text" />
                 <span asp-validation-for="SubscriptionFee" class="text-danger"></span>
             </div>
 
@@ -63,7 +63,7 @@
 
             <div class="form-group">
                 <label asp-for="DataRatePerMb" class="control-label">1мб</label>
-                <input asp-for="DataRatePerMb" class="form-control" />
+                <input asp-for="DataRatePerMb" class="form-control" type="text" />
                 <span asp-validation-for="DataRatePerMb" class="text-danger"></span>
             </div>
 
@@ -79,7 +79,18 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.value = input.value.replace(',', '.');
+            input.addEventListener('input', function () {
+                this.value = this.value.replace(',', '.');
+            });
+        });
+        document.getElementById('tariffPlanForm').addEventListener('submit', function () {
+            const inputs = this.querySelectorAll('input[type="text"]');
+            inputs.forEach(input => {
+                input.value = input.value.replace('.', ',');
+            });
+        });
+    </script>
 }
