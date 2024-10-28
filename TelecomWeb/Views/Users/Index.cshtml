@@ -13,7 +13,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>UserName</th>
+            <th>Имя</th>
             <th>Email</th>
             <th></th>
         </tr>
@@ -25,9 +25,9 @@
                 <td>@user.UserName</td>
                 <td>@user.Email</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@user.Id">Редактирование</a> |
+                    <a asp-action="Details" asp-route-id="@user.Id">Подробность</a> |
+                    <a asp-action="Delete" asp-route-id="@user.Id">Удалить</a>
                 </td>
             </tr>
         }

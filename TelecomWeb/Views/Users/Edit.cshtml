@@ -2,16 +2,16 @@
 @model EditUserViewModel
 
 @{
-    ViewData["Title"] = "Edit User";
+    ViewData["Title"] = "Редактировать";
 }
 
-<h1>Edit User</h1>
+<h1>Редактировать</h1>
 
 <form asp-action="Edit" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
-        <label asp-for="UserName" class="control-label"></label>
+        <label asp-for="UserName" class="control-label">Имя</label>
         <input asp-for="UserName" class="form-control" />
         <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
@@ -20,7 +20,7 @@
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary">Save</button>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
 </form>
 
-<a asp-action="Index">Back to List</a>
+<a asp-action="Index">Вернуться к списку</a>
