@@ -20,13 +20,17 @@ namespace TelecomWeb.Controllers.tables
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, int pageNumber = 1)
+        public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, string tariffSearch, int pageNumber = 1)
         {
             ViewData["NameFilter"] = nameSearch;
             ViewData["AddressFilter"] = addressSearch;
             ViewData["PassportFilter"] = passportSearch;
+            ViewData["TariffFilter"] = tariffSearch;
 
-            var subscribers = from s in _context.Subscribers select s;
+            var subscribers = from s in _context.Subscribers
+                              .Include(s => s.Contracts)
+                              .ThenInclude(c => c.TariffPlan)
+                              select s;
 
             if (!string.IsNullOrEmpty(nameSearch))
             {
@@ -41,6 +45,11 @@ namespace TelecomWeb.Controllers.tables
             if (!string.IsNullOrEmpty(passportSearch))
             {
                 subscribers = subscribers.Where(s => s.PassportData.Contains(passportSearch));
+            }
+
+            if (!string.IsNullOrEmpty(tariffSearch))
+            {
+                subscribers = subscribers.Where(s => s.Contracts.Any(c => c.TariffPlan.TariffName.Contains(tariffSearch)));
             }
 
             int pageSize = 30;
