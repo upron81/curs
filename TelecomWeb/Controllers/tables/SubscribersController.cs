@@ -193,5 +193,17 @@ namespace TelecomWeb.Controllers.tables
         {
             return _context.Subscribers.Any(e => e.SubscriberId == id);
         }
+
+        public async Task<IActionResult> Statistic()
+        {
+            var currentYear = DateTime.Now.Year;
+
+            var subscriberCount = _context.Subscribers
+            .Where(s => s.Contracts.All(c => c.ContractDate.Year == currentYear) &&
+                        !s.Contracts.Any(c => c.ContractDate.Year < currentYear))
+            .Count();
+
+            return View(subscriberCount);
+        }
     }
 }
