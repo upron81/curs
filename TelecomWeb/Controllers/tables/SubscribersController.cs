@@ -66,7 +66,7 @@ namespace TelecomWeb.Controllers.tables
         }
 
         // GET: Subscribers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, DateTime? startDate, DateTime? endDate)
         {
             if (id == null)
             {
@@ -74,11 +74,54 @@ namespace TelecomWeb.Controllers.tables
             }
 
             var subscriber = await _context.Subscribers
+                .Include(s => s.Contracts)
+                    .ThenInclude(c => c.Calls)
+                .Include(s => s.Contracts)
+                    .ThenInclude(c => c.Messages)
+                .Include(s => s.Contracts)
+                    .ThenInclude(c => c.InternetUsages)
+                .Include(s => s.Contracts)
+                    .ThenInclude(c => c.TariffPlan)
                 .FirstOrDefaultAsync(m => m.SubscriberId == id);
+
             if (subscriber == null)
             {
                 return NotFound();
             }
+
+            decimal grandTotalCost = 0;
+
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                foreach (var contract in subscriber.Contracts)
+                {
+                    var tariff = contract.TariffPlan;
+                    if (tariff != null)
+                    {
+                        decimal totalCallCost = contract.Calls
+                            .Where(call => call.CallDate >= startDate && call.CallDate <= endDate)
+                            .Sum(call => call.CallDuration * (tariff.IsPerSecond ? tariff.LocalCallRate / 60 : tariff.LocalCallRate));
+
+                        decimal totalSmsCost = contract.Messages
+                            .Where(m => m.MessageDate >= startDate && m.MessageDate <= endDate)
+                            .Count(m => !m.IsMms) * tariff.SmsRate;
+
+                        decimal totalMmsCost = contract.Messages
+                            .Where(m => m.MessageDate >= startDate && m.MessageDate <= endDate)
+                            .Count(m => m.IsMms) * tariff.MmsRate;
+
+                        decimal totalInternetCost = contract.InternetUsages
+                            .Where(u => u.UsageDate >= startDate && u.UsageDate <= endDate)
+                            .Sum(u => (u.DataSentMb + u.DataReceivedMb) * tariff.DataRatePerMb);
+
+                        grandTotalCost += totalCallCost + totalSmsCost + totalMmsCost + totalInternetCost;
+                    }
+                }
+            }
+
+            ViewBag.GrandTotalCost = grandTotalCost;
+            ViewBag.StartDate = startDate?.ToString("yyyy-MM-dd");
+            ViewBag.EndDate = endDate?.ToString("yyyy-MM-dd");
 
             return View(subscriber);
         }
