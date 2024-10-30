@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TelecomWeb.Data;
 
 namespace TelecomWeb.Services
 {
@@ -15,10 +16,11 @@ namespace TelecomWeb.Services
 
         public void Initialize()
         {
-            CreateRoleIfNotExists("admin");
-            CreateRoleIfNotExists("manager");
+            foreach (var roleName in Enum.GetNames(typeof(Role)))
+                if (!_roleManager.RoleExistsAsync(roleName).Result)
+                    _roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
 
-            var user = _userManager.FindByNameAsync("admin").Result;
+            var user = _userManager.FindByNameAsync("d@d.d").Result;
             if (user == null)
             {
                 user = new IdentityUser
@@ -29,16 +31,8 @@ namespace TelecomWeb.Services
                 var createResult = _userManager.CreateAsync(user, "pass").Result;
                 if (createResult.Succeeded)
                 {
-                    _userManager.AddToRoleAsync(user, "admin").Wait();
+                    _userManager.AddToRoleAsync(user, Role.admin.ToString()).Wait();
                 }
-            }
-        }
-
-        private void CreateRoleIfNotExists(string roleName)
-        {
-            if (!_roleManager.RoleExistsAsync(roleName).Result)
-            {
-                _roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
             }
         }
     }

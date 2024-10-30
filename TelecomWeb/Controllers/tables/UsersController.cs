@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
+using TelecomWeb.Data;
 using TelecomWeb.Models;
 
 namespace TelecomWeb.Controllers
@@ -56,8 +57,8 @@ namespace TelecomWeb.Controllers
             if (ModelState.IsValid)
             {
                 var user = new IdentityUser { UserName = model.UserName, Email = model.Email };
-                _userManager.AddToRoleAsync(user, "manager").Wait();
                 var result = await _userManager.CreateAsync(user, model.Password);
+                _userManager.AddToRoleAsync(user, Role.manager.ToString()).Wait();
                 if (result.Succeeded)
                 {
                     return RedirectToAction(nameof(Index));

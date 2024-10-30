@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using TelecomWeb.Data
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -25,7 +27,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        @if (User.IsInRole("manager") || User.IsInRole("admin"))
+                        @if (User.IsInRole(Role.admin.ToString()) || User.IsInRole(Role.manager.ToString()))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Contracts" asp-action="Index">Контракты</a>
@@ -55,7 +57,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Subscribers" asp-action="Statistic">Новые абоненты</a>
                             </li>
                         }
-                        @if (User.IsInRole("admin"))
+                        @if (User.IsInRole(Role.admin.ToString()))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Пользователи</a>
