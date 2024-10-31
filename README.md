@@ -1,3 +1,2 @@
-# db2
-[![Build Project lab 2](https://github.com/upron81/db2/actions/workflows/build.yml/badge.svg)](https://github.com/upron81/db2/actions/workflows/build.yml)
-[![Build Project lab 3](https://github.com/upron81/db2/actions/workflows/build.yml/badge.svg?branch=db3)](https://github.com/upron81/db2/actions/workflows/build.yml)
+# Курсовая
+[![Build Project](https://github.com/upron81/curs/actions/workflows/build.yml/badge.svg)](https://github.com/upron81/curs/actions/workflows/build.yml)
