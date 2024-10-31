@@ -1,5 +1,4 @@
 **/obj/
 **/bin/
 **/.vs/
-/TelecomApp/appsettings.json
-/AspWeb/appsettings.json
+**/appsettings.json
