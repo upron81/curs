@@ -2,7 +2,8 @@
 @model IEnumerable<IdentityUser>
 
 @{
-    ViewData["Title"] = "Пользователи";
+    ViewData["Title"] = "Пользователи"; 
+    var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -19,7 +20,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var user in Model.Where(u => u.Id != currentUserId))
         {
             <tr>
                 <td>@user.UserName</td>
