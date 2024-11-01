@@ -20,7 +20,14 @@ namespace TelecomWeb.Controllers.tables
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, string tariffSearch, int pageNumber = 1)
+        public async Task<IActionResult> Index(
+            string nameSearch,
+            string addressSearch,
+            string passportSearch,
+            string tariffSearch,
+            DateTime? startDate,
+            DateTime? endDate,
+            int pageNumber = 1)
         {
             ViewBag.Tariffs = await _context.TariffPlans
                                              .Select(t => t.TariffName)
@@ -31,6 +38,8 @@ namespace TelecomWeb.Controllers.tables
             ViewData["AddressFilter"] = addressSearch;
             ViewData["PassportFilter"] = passportSearch;
             ViewData["TariffFilter"] = tariffSearch;
+            ViewData["StartDate"] = startDate?.ToString("yyyy-MM-dd");
+            ViewData["EndDate"] = endDate?.ToString("yyyy-MM-dd");
 
             var subscribers = from s in _context.Subscribers
                               .Include(s => s.Contracts)
@@ -54,7 +63,16 @@ namespace TelecomWeb.Controllers.tables
 
             if (!string.IsNullOrEmpty(tariffSearch))
             {
-                subscribers = subscribers.Where(s => s.Contracts.Any(c => c.TariffPlan.TariffName == tariffSearch));
+                subscribers = subscribers.Where(s => s.Contracts.Any(c => c.TariffPlan.TariffName.Contains(tariffSearch)));
+            }
+
+            DateOnly? startDateOnly = startDate.HasValue ? DateOnly.FromDateTime(startDate.Value) : null;
+            DateOnly? endDateOnly = endDate.HasValue ? DateOnly.FromDateTime(endDate.Value) : null;
+
+            if (startDateOnly.HasValue && endDateOnly.HasValue)
+            {
+                subscribers = subscribers.Where(s =>
+                    s.Contracts.All(c => c.ContractDate >= startDateOnly && c.ContractDate <= endDateOnly));
             }
 
             int pageSize = 30;

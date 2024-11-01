@@ -27,6 +27,12 @@
             }
         </select>
     </div>
+    <div class="form-group mr-2">
+        <input type="date" name="startDate" value="@ViewData["StartDate"]" class="form-control" placeholder="Дата начала" />
+    </div>
+    <div class="form-group mr-2">
+        <input type="date" name="endDate" value="@ViewData["EndDate"]" class="form-control" placeholder="Дата окончания" />
+    </div>
     <button type="submit" class="btn btn-primary">Поиск</button>
 </form>
 
@@ -76,7 +82,8 @@
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
             <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)"
                asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]"
-               asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]">Назад</a>
+               asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]"
+               asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]">Назад</a>
         </li>
 
         @if (Model.PageIndex > 3)
@@ -84,7 +91,8 @@
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="1"
                    asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]"
-                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]">1</a>
+                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]"
+                   asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]">1</a>
             </li>
             <li class="page-item disabled"><span class="page-link">...</span></li>
         }
@@ -94,7 +102,8 @@
             <li class="page-item @(i == Model.PageIndex ? "active" : "")">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
                    asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]"
-                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]">@i</a>
+                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]"
+                   asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]">@i</a>
             </li>
         }
 
@@ -104,14 +113,16 @@
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.TotalPages)"
                    asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]"
-                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]">@Model.TotalPages</a>
+                   asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]"
+                   asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]">@Model.TotalPages</a>
             </li>
         }
 
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
             <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)"
                asp-route-nameSearch="@ViewData["NameFilter"]" asp-route-addressSearch="@ViewData["AddressFilter"]"
-               asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]">Вперёд</a>
+               asp-route-passportSearch="@ViewData["PassportFilter"]" asp-route-tariffSearch="@ViewData["TariffFilter"]"
+               asp-route-startDate="@ViewData["StartDate"]" asp-route-endDate="@ViewData["EndDate"]">Вперёд</a>
         </li>
     </ul>
 </div>
