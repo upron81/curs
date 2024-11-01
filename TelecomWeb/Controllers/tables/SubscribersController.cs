@@ -22,6 +22,11 @@ namespace TelecomWeb.Controllers.tables
 
         public async Task<IActionResult> Index(string nameSearch, string addressSearch, string passportSearch, string tariffSearch, int pageNumber = 1)
         {
+            ViewBag.Tariffs = await _context.TariffPlans
+                                             .Select(t => t.TariffName)
+                                             .Distinct()
+                                             .ToListAsync();
+
             ViewData["NameFilter"] = nameSearch;
             ViewData["AddressFilter"] = addressSearch;
             ViewData["PassportFilter"] = passportSearch;
@@ -49,7 +54,7 @@ namespace TelecomWeb.Controllers.tables
 
             if (!string.IsNullOrEmpty(tariffSearch))
             {
-                subscribers = subscribers.Where(s => s.Contracts.Any(c => c.TariffPlan.TariffName.Contains(tariffSearch)));
+                subscribers = subscribers.Where(s => s.Contracts.Any(c => c.TariffPlan.TariffName == tariffSearch));
             }
 
             int pageSize = 30;
