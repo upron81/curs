@@ -21,9 +21,22 @@ namespace TelecomWeb.Controllers.tables
         }
 
         // GET: TariffPlans
-        public async Task<IActionResult> Index(int pageNumber = 1, string searchTariffName = "", string searchSubscriptionFee = "", string searchLocalCallRate = "", string searchLongDistanceCallRate = "", string searchInternationalCallRate = "")
+        public async Task<IActionResult> Index(
+            int pageNumber = 1,
+            string searchTariffName = "",
+            string searchSubscriptionFee = "",
+            string searchLocalCallRate = "",
+            string searchLongDistanceCallRate = "",
+            string searchInternationalCallRate = "",
+            string sortOrder = "",
+            string currentSort = "")
         {
             int pageSize = 30;
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["TariffNameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "tariffName_desc" : "";
+            ViewData["SubscriptionFeeSortParm"] = sortOrder == "subscriptionFee" ? "subscriptionFee_desc" : "subscriptionFee";
+            ViewData["LocalCallRateSortParm"] = sortOrder == "localCallRate" ? "localCallRate_desc" : "localCallRate";
 
             var telecomDbContext = _context.TariffPlans.AsQueryable();
 
@@ -52,10 +65,19 @@ namespace TelecomWeb.Controllers.tables
                 telecomDbContext = telecomDbContext.Where(t => t.InternationalCallRate == internationalCallRate);
             }
 
+            telecomDbContext = sortOrder switch
+            {
+                "tariffName_desc" => telecomDbContext.OrderByDescending(t => t.TariffName),
+                "subscriptionFee" => telecomDbContext.OrderBy(t => t.SubscriptionFee),
+                "subscriptionFee_desc" => telecomDbContext.OrderByDescending(t => t.SubscriptionFee),
+                "localCallRate" => telecomDbContext.OrderBy(t => t.LocalCallRate),
+                "localCallRate_desc" => telecomDbContext.OrderByDescending(t => t.LocalCallRate),
+                _ => telecomDbContext.OrderBy(t => t.TariffName)
+            };
+
             var totalTariffPlans = await telecomDbContext.CountAsync();
 
             var tariffPlans = await telecomDbContext
-                .OrderBy(t => t.TariffPlanId)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();

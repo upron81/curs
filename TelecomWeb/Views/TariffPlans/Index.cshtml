@@ -32,9 +32,30 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Название</th>
-            <th>Абонентская плата</th>
-            <th>Местная связь</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TariffNameSortParm"]" asp-route-pageNumber="@(Model.PageIndex)"
+                   asp-route-searchTariffName="@ViewData["searchTariffName"]"
+                   asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+                   asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+                   asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+                   asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Название</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SubscriptionFeeSortParm"]" asp-route-pageNumber="@(Model.PageIndex)"
+                   asp-route-searchTariffName="@ViewData["searchTariffName"]"
+                   asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+                   asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+                   asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+                   asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Абонентская плата</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LocalCallRateSortParm"]" asp-route-pageNumber="@(Model.PageIndex)"
+                   asp-route-searchTariffName="@ViewData["searchTariffName"]"
+                   asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
+                   asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
+                   asp-route-searchLongDistanceCallRate="@ViewData["searchLongDistanceCallRate"]"
+                   asp-route-searchInternationalCallRate="@ViewData["searchInternationalCallRate"]">Местная связь</a>
+            </th>
             <th>Междугородная связь</th>
             <th>Роуминг</th>
             <th>Посекундная тарификация</th>
@@ -71,6 +92,7 @@
     <ul class="pagination">
         <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
             <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
                asp-route-searchTariffName="@ViewData["searchTariffName"]"
                asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
@@ -82,6 +104,7 @@
         {
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="1"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    asp-route-searchTariffName="@ViewData["searchTariffName"]"
                    asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                    asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
@@ -95,6 +118,7 @@
         {
             <li class="page-item @(i == Model.PageIndex ? "active" : "")">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="@i"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    asp-route-searchTariffName="@ViewData["searchTariffName"]"
                    asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                    asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
@@ -108,6 +132,7 @@
             <li class="page-item disabled"><span class="page-link">...</span></li>
             <li class="page-item">
                 <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.TotalPages)"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
                    asp-route-searchTariffName="@ViewData["searchTariffName"]"
                    asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                    asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
@@ -118,6 +143,7 @@
 
         <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
             <a class="page-link" asp-action="Index" asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
                asp-route-searchTariffName="@ViewData["searchTariffName"]"
                asp-route-searchSubscriptionFee="@ViewData["searchSubscriptionFee"]"
                asp-route-searchLocalCallRate="@ViewData["searchLocalCallRate"]"
