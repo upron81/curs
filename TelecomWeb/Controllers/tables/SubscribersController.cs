@@ -27,7 +27,9 @@ namespace TelecomWeb.Controllers.tables
             string tariffSearch,
             DateTime? startDate,
             DateTime? endDate,
-            int pageNumber = 1)
+            int pageNumber = 1,
+            string sortOrder = "",
+            string currentSort = "")
         {
             ViewBag.Tariffs = await _context.TariffPlans
                                              .Select(t => t.TariffName)
@@ -40,6 +42,12 @@ namespace TelecomWeb.Controllers.tables
             ViewData["TariffFilter"] = tariffSearch;
             ViewData["StartDate"] = startDate?.ToString("yyyy-MM-dd");
             ViewData["EndDate"] = endDate?.ToString("yyyy-MM-dd");
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["AddressSortParm"] = sortOrder == "address" ? "address_desc" : "address";
+            ViewData["PassportSortParm"] = sortOrder == "passport" ? "passport_desc" : "passport";
+            ViewData["TariffSortParm"] = sortOrder == "tariff" ? "tariff_desc" : "tariff";
 
             var subscribers = from s in _context.Subscribers
                               .Include(s => s.Contracts)
@@ -75,10 +83,21 @@ namespace TelecomWeb.Controllers.tables
                     s.Contracts.All(c => c.ContractDate >= startDateOnly && c.ContractDate <= endDateOnly));
             }
 
+            subscribers = sortOrder switch
+            {
+                "name_desc" => subscribers.OrderByDescending(s => s.FullName),
+                "address" => subscribers.OrderBy(s => s.HomeAddress),
+                "address_desc" => subscribers.OrderByDescending(s => s.HomeAddress),
+                "passport" => subscribers.OrderBy(s => s.PassportData),
+                "passport_desc" => subscribers.OrderByDescending(s => s.PassportData),
+                "tariff" => subscribers.OrderBy(s => s.Contracts.LastOrDefault().TariffPlan.TariffName),
+                "tariff_desc" => subscribers.OrderByDescending(s => s.Contracts.LastOrDefault().TariffPlan.TariffName),
+                _ => subscribers.OrderBy(s => s.FullName),
+            };
+
             int pageSize = 30;
             var totalSubscribers = await subscribers.CountAsync();
             var paginatedList = await subscribers
-                .OrderBy(s => s.SubscriberId)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
