@@ -21,9 +21,21 @@ namespace TelecomWeb.Controllers.tables
         }
 
         // GET: Contracts
-        public async Task<IActionResult> Index(int pageNumber = 1, string searchSubscriber = "", string searchTariff = "", string searchStaff = "", string searchPhone = "")
+        public async Task<IActionResult> Index(
+            int pageNumber = 1,
+            string searchSubscriber = "",
+            string searchTariff = "",
+            string searchStaff = "",
+            string searchPhone = "",
+            string sortOrder = "")
         {
             int pageSize = 30;
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["SubscriberSortParm"] = String.IsNullOrEmpty(sortOrder) ? "subscriber_desc" : "";
+            ViewData["TariffSortParm"] = sortOrder == "tariff" ? "tariff_desc" : "tariff";
+            ViewData["StaffSortParm"] = sortOrder == "staff" ? "staff_desc" : "staff";
+            ViewData["PhoneSortParm"] = sortOrder == "phone" ? "phone_desc" : "phone";
 
             var telecomDbContext = _context.Contracts
                 .Include(c => c.Staff)
@@ -51,9 +63,20 @@ namespace TelecomWeb.Controllers.tables
                 telecomDbContext = telecomDbContext.Where(c => c.PhoneNumber.Contains(searchPhone));
             }
 
+            telecomDbContext = sortOrder switch
+            {
+                "subscriber_desc" => telecomDbContext.OrderByDescending(c => c.Subscriber.FullName),
+                "tariff" => telecomDbContext.OrderBy(c => c.TariffPlan.TariffName),
+                "tariff_desc" => telecomDbContext.OrderByDescending(c => c.TariffPlan.TariffName),
+                "staff" => telecomDbContext.OrderBy(c => c.Staff.FullName),
+                "staff_desc" => telecomDbContext.OrderByDescending(c => c.Staff.FullName),
+                "phone" => telecomDbContext.OrderBy(c => c.PhoneNumber),
+                "phone_desc" => telecomDbContext.OrderByDescending(c => c.PhoneNumber),
+                _ => telecomDbContext.OrderBy(c => c.Subscriber.FullName),
+            };
+
             var totalContracts = await telecomDbContext.CountAsync();
             var contracts = await telecomDbContext
-                .OrderBy(c => c.ContractId)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
