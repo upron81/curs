@@ -90,8 +90,6 @@ namespace TelecomWeb.Controllers.tables
                 "address_desc" => subscribers.OrderByDescending(s => s.HomeAddress),
                 "passport" => subscribers.OrderBy(s => s.PassportData),
                 "passport_desc" => subscribers.OrderByDescending(s => s.PassportData),
-                "tariff" => subscribers.OrderBy(s => s.Contracts.LastOrDefault().TariffPlan.TariffName),
-                "tariff_desc" => subscribers.OrderByDescending(s => s.Contracts.LastOrDefault().TariffPlan.TariffName),
                 _ => subscribers.OrderBy(s => s.FullName),
             };
 
