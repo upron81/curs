@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using System;
 using TelecomWeb.Data;
 
 namespace TelecomWeb.Services
@@ -7,11 +9,13 @@ namespace TelecomWeb.Services
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IConfiguration _configuration;
 
-        public IdentitySeedData(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+        public IdentitySeedData(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _configuration = configuration;
         }
 
         public void Initialize()
@@ -20,18 +24,31 @@ namespace TelecomWeb.Services
                 if (!_roleManager.RoleExistsAsync(roleName).Result)
                     _roleManager.CreateAsync(new IdentityRole(roleName)).Wait();
 
-            var user = _userManager.FindByNameAsync("d@d.d").Result;
+            var adminEmail = _configuration["IdentitySeed:AdminEmail"];
+            var adminPassword = _configuration["IdentitySeed:AdminPassword"];
+
+            if (string.IsNullOrEmpty(adminEmail) || string.IsNullOrEmpty(adminPassword))
+            {
+                throw new InvalidOperationException("Admin email or password is not configured in appsettings.json.");
+            }
+
+            var user = _userManager.FindByNameAsync(adminEmail).Result;
             if (user == null)
             {
                 user = new IdentityUser
                 {
-                    UserName = "d@d.d",
-                    Email = "d@d.d"
+                    UserName = adminEmail,
+                    Email = adminEmail
                 };
-                var createResult = _userManager.CreateAsync(user, "pass").Result;
+
+                var createResult = _userManager.CreateAsync(user, adminPassword).Result;
                 if (createResult.Succeeded)
                 {
                     _userManager.AddToRoleAsync(user, Role.admin.ToString()).Wait();
+                }
+                else
+                {
+                    throw new Exception($"Failed to create admin user: {string.Join(", ", createResult.Errors)}");
                 }
             }
         }
