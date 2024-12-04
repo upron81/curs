@@ -18,7 +18,6 @@ namespace TelecomWeb
             builder.Services.AddMemoryCache();
             builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession();
-            builder.Services.AddScoped<ICachedDataService, CachedDataService>();
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
