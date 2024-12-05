@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
+using System.Text;
 
 namespace TelecomWeb.Data
 {
@@ -15,7 +16,7 @@ namespace TelecomWeb.Data
 
             if (File.Exists(sqlFilePath))
             {
-                string sql = File.ReadAllText(sqlFilePath);
+                string sql = File.ReadAllText(sqlFilePath, Encoding.UTF8);
 
                 db.Database.ExecuteSqlRaw(sql);
             }

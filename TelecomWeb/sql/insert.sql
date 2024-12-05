@@ -1,272 +1,371 @@
--- Настройки для вставки данных
-DECLARE @Symbol CHAR(52)= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz',
-        @Position INT,
-        @i INT,
-        @NameLimit INT,
-        @FullName NVARCHAR(150),
-        @HomeAddress NVARCHAR(255),
-        @PassportData NVARCHAR(100),
-        @TariffName NVARCHAR(100),
-        @TariffPlanID INT,
-        @SubscriberID INT,
-        @StaffID INT = 20,
-        @TariffPlanCount INT = 500,
-        @SubscriberCount INT = 500,
-        @ContractCount INT = 2000,
-        @PhoneNumber NVARCHAR(20),
-        @ContractDate DATE,
-        @ContractEndDate DATE,
-        @MinSymbols INT,
-        @MaxSymbols INT;
+п»ї-- 1. Р’СЃС‚Р°РІРєР° РґРѕР»Р¶РЅРѕСЃС‚РµР№ РІ С‚Р°Р±Р»РёС†Сѓ StaffPosition
+IF NOT EXISTS (SELECT 1 FROM StaffPosition)
+BEGIN
+    INSERT INTO StaffPosition (PositionName) VALUES
+    ('РњРµРЅРµРґР¶РµСЂ'),
+    ('РћРїРµСЂР°С‚РѕСЂ'),
+    ('РўРµС…РЅРёРє'),
+    ('РђРЅР°Р»РёС‚РёРє'),
+    ('РђРґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ'),
+    ('РњР°СЂРєРµС‚РѕР»РѕРі'),
+    ('Р‘СѓС…РіР°Р»С‚РµСЂ'),
+    ('HR-СЃРїРµС†РёР°Р»РёСЃС‚'),
+    ('Р Р°Р·СЂР°Р±РѕС‚С‡РёРє'),
+    ('Р”РёР·Р°Р№РЅРµСЂ');
+END
 
--- Добавление должности для сотрудника
-INSERT INTO StaffPosition (PositionName)
-VALUES ('Оператор');
+-- 2. Р’СЃС‚Р°РІРєР° С‚Р°СЂРёС„РЅС‹С… РїР»Р°РЅРѕРІ РІ С‚Р°Р±Р»РёС†Сѓ TariffPlans
+IF NOT EXISTS (SELECT 1 FROM TariffPlans)
+BEGIN
+    INSERT INTO TariffPlans (TariffName, SubscriptionFee, LocalCallRate, LongDistanceCallRate, InternationalCallRate, IsPerSecond, SmsRate, MmsRate, DataRatePerMB) VALUES
+    ('Р‘Р°Р·РѕРІС‹Р№', 299.99, 0.10, 0.50, 1.50, 0, 0.05, 0.10, 0.20),
+    ('РЎС‚Р°РЅРґР°СЂС‚', 499.99, 0.08, 0.40, 1.20, 0, 0.04, 0.08, 0.15),
+    ('РџСЂРµРјРёСѓРј', 799.99, 0.05, 0.30, 1.00, 1, 0.03, 0.05, 0.10),
+    ('Р‘РµР·Р»РёРјРёС‚', 999.99, 0.00, 0.00, 0.00, 1, 0.00, 0.00, 0.00),
+    ('Р­РєРѕРЅРѕРј', 199.99, 0.12, 0.60, 1.80, 0, 0.06, 0.12, 0.25),
+    ('Р‘РёР·РЅРµСЃ', 599.99, 0.07, 0.35, 1.05, 1, 0.035, 0.07, 0.12),
+    ('РЎРµРјРµР№РЅС‹Р№', 749.99, 0.06, 0.30, 0.90, 1, 0.03, 0.06, 0.10),
+    ('РџСЂРѕ', 899.99, 0.04, 0.25, 0.80, 1, 0.025, 0.05, 0.08),
+    ('РњРёРЅРёРјР°Р»СЊРЅС‹Р№', 149.99, 0.15, 0.75, 2.00, 0, 0.07, 0.14, 0.30),
+    ('РЈР»СЊС‚СЂР°', 1299.99, 0.00, 0.00, 0.00, 1, 0.00, 0.00, 0.00);
+END
 
--- Добавление сотрудников
+-- 3. РЎРѕР·РґР°РЅРёРµ РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹С… С‚Р°Р±Р»РёС† РґР»СЏ РіРµРЅРµСЂР°С†РёРё РґР°РЅРЅС‹С…
+DECLARE @FirstNames TABLE (Name NVARCHAR(50));
+DECLARE @LastNames TABLE (Name NVARCHAR(50));
+DECLARE @MiddleNames TABLE (Name NVARCHAR(50));
+DECLARE @Streets TABLE (Name NVARCHAR(100));
+DECLARE @Cities TABLE (Name NVARCHAR(100));
+
+-- Р—Р°РїРѕР»РЅРµРЅРёРµ С‚Р°Р±Р»РёС† РёРјРµРЅР°РјРё
+INSERT INTO @FirstNames (Name) VALUES 
+('РРІР°РЅ'), ('РњР°СЂРёСЏ'), ('РЎРµСЂРіРµР№'), ('РђРЅРЅР°'), ('Р”РјРёС‚СЂРёР№'),
+('Р•Р»РµРЅР°'), ('РђР»РµРєСЃРµР№'), ('РћР»СЊРіР°'), ('РќРёРєРѕР»Р°Р№'), ('РўР°С‚СЊСЏРЅР°'),
+('РџР°РІРµР»'), ('РљСЃРµРЅРёСЏ'), ('РњР°РєСЃРёРј'), ('Р•РєР°С‚РµСЂРёРЅР°'), ('РњРёС…Р°РёР»'),
+('РђРЅР°СЃС‚Р°СЃРёСЏ'), ('Р’Р»Р°РґРёРјРёСЂ'), ('Р®Р»РёСЏ'), ('РљРѕРЅСЃС‚Р°РЅС‚РёРЅ'), ('Р›СЋРґРјРёР»Р°');
+
+INSERT INTO @LastNames (Name) VALUES 
+('РРІР°РЅРѕРІ'), ('РџРµС‚СЂРѕРІ'), ('РЎРёРґРѕСЂРѕРІ'), ('РљСѓР·РЅРµС†РѕРІ'), ('РњРёС…Р°Р№Р»РѕРІ'),
+('РљРѕР·Р»РѕРІР°'), ('Р’Р°СЃРёР»СЊРµРІ'), ('РџРѕРїРѕРІР°'), ('Р›РµР±РµРґРµРІ'), ('РЎРјРёСЂРЅРѕРІР°'),
+('РќРѕРІРёРєРѕРІ'), ('Р¤С‘РґРѕСЂРѕРІ'), ('РњРѕСЂРѕР·РѕРІ'), ('Р’РѕР»РєРѕРІР°'), ('РђР»РµРєСЃРµРµРІ'),
+('РЎРѕРєРѕР»РѕРІ'), ('Р•РіРѕСЂРѕРІ'), ('Р‘Р°СЂР°РЅРѕРІ'), ('Р“РѕР»СѓР±РµРІ'), ('РћСЂР»РѕРІ');
+
+INSERT INTO @MiddleNames (Name) VALUES 
+('РРІР°РЅРѕРІРёС‡'), ('РђР»РµРєСЃРµРµРІРёС‡'), ('РџРµС‚СЂРѕРІРёС‡'), ('РЎРµСЂРіРµРµРІРёС‡'), ('Р’Р»Р°РґРёРјРёСЂРѕРІРёС‡'),
+('РќРёРєРѕР»Р°РµРІРёС‡'), ('РРіРѕСЂРµРІРёС‡'), ('Р’РёРєС‚РѕСЂРѕРІРёС‡'), ('Р”РјРёС‚СЂРёРµРІРёС‡'), ('Р•РіРѕСЂРѕРІРёС‡'),
+('РњРёС…Р°Р№Р»РѕРІРёС‡'), ('РђРЅРґСЂРµРµРІРёС‡'), ('Р®СЂСЊРµРІРёС‡'), ('РљРѕРЅСЃС‚Р°РЅС‚РёРЅРѕРІРёС‡'), ('РњР°РєСЃРёРјРѕРІРёС‡'),
+('РћР»РµРіРѕРІРёС‡'), ('РЎС‚Р°РЅРёСЃР»Р°РІРѕРІРёС‡'), ('Р“СЂРёРіРѕСЂСЊРµРІРёС‡'), ('РђРЅР°С‚РѕР»СЊРµРІРёС‡'), ('Р’Р°Р»РµСЂСЊРµРІРёС‡');
+
+INSERT INTO @Streets (Name) VALUES 
+('Р›РµРЅРёРЅР°'), ('РЎРѕРІРµС‚СЃРєР°СЏ'), ('РњРёСЂР°'), ('РџРѕР±РµРґС‹'), ('РњРѕСЃРєРѕРІСЃРєР°СЏ'),
+('РќРѕРІР°СЏ'), ('РЎР°РґРѕРІР°СЏ'), ('Р¦РµРЅС‚СЂР°Р»СЊРЅР°СЏ'), ('Р›СѓРЅР°С‡Р°СЂСЃРєРѕРіРѕ'), ('РљРёСЂРѕРІР°'),
+('Р“Р°РіР°СЂРёРЅР°'), ('Р”РѕСЂРѕР¶РЅР°СЏ'), ('РЎРµРІРµСЂРЅР°СЏ'), ('Р®Р¶РЅР°СЏ'), ('Р—Р°РїР°РґРЅР°СЏ'),
+('Р’РѕСЃС‚РѕС‡РЅР°СЏ'), ('РџР°СЂРєРѕРІР°СЏ'), ('Р РµС‡РЅР°СЏ'), ('Р›РµСЃРЅР°СЏ'), ('Р¤СЂСѓРЅР·РµРЅСЃРєР°СЏ');
+
+INSERT INTO @Cities (Name) VALUES 
+('РњРѕСЃРєРІР°'), ('РЎР°РЅРєС‚-РџРµС‚РµСЂР±СѓСЂРі'), ('РќРѕРІРѕСЃРёР±РёСЂСЃРє'), ('Р•РєР°С‚РµСЂРёРЅР±СѓСЂРі'), ('РљР°Р·Р°РЅСЊ'),
+('РќРёР¶РЅРёР№ РќРѕРІРіРѕСЂРѕРґ'), ('Р§РµР»СЏР±РёРЅСЃРє'), ('РЎР°РјР°СЂР°'), ('РћРјСЃРє'), ('Р РѕСЃС‚РѕРІ-РЅР°-Р”РѕРЅСѓ'),
+('РЈС„Р°'), ('РљСЂР°СЃРЅРѕСЏСЂСЃРє'), ('Р’РѕСЂРѕРЅРµР¶'), ('РџРµСЂРјСЊ'), ('Р’РѕР»РіРѕРіСЂР°Рґ'),
+('РљСЂР°СЃРЅРѕРґР°СЂ'), ('РЎР°СЂР°С‚РѕРІ'), ('РўРѕР»СЊСЏС‚С‚Рё'), ('РР¶РµРІСЃРє'), ('Р‘Р°СЂРЅР°СѓР»');
+
+-- 4. Р’СЃС‚Р°РІРєР° СЃРѕС‚СЂСѓРґРЅРёРєРѕРІ РІ С‚Р°Р±Р»РёС†Сѓ Staff
+-- РџСЂРµРґРїРѕР»Р°РіР°РµС‚СЃСЏ, С‡С‚Рѕ StaffPosition СѓР¶Рµ Р·Р°РїРѕР»РЅРµРЅР°
+
+DECLARE @StaffRecords TABLE (
+    FullName NVARCHAR(150),
+    PositionID INT,
+    Education NVARCHAR(100)
+);
+
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @FirstName NVARCHAR(50);
+DECLARE @LastName NVARCHAR(50);
+DECLARE @MiddleName NVARCHAR(50);
+DECLARE @FullName NVARCHAR(150);
+DECLARE @PositionID INT;
+DECLARE @Education NVARCHAR(100);
+
+SET NOCOUNT ON;
+
+DECLARE @StaffTotal INT = 1000;
+DECLARE @StaffCounter INT = 1;
+
+WHILE @StaffCounter <= @StaffTotal
+BEGIN
+    -- Р’С‹Р±РѕСЂ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ РёРјРµРЅРё
+    SELECT TOP 1 @FirstName = Name FROM @FirstNames ORDER BY NEWID();
+    SELECT TOP 1 @LastName = Name FROM @LastNames ORDER BY NEWID();
+    SELECT TOP 1 @MiddleName = Name FROM @MiddleNames ORDER BY NEWID();
+    SET @FullName = CONCAT(@LastName, ' ', @FirstName, ' ', @MiddleName);
+    
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ РІС‹Р±РѕСЂ PositionID
+    SELECT @PositionID = PositionID FROM StaffPosition ORDER BY NEWID();
+    
+    -- Р“РµРЅРµСЂР°С†РёСЏ РѕР±СЂР°Р·РѕРІР°РЅРёСЏ
+    SELECT TOP 1 @Education = 
+        CASE (ABS(CHECKSUM(NEWID())) % 5)
+            WHEN 0 THEN 'Р’С‹СЃС€РµРµ СЌРєРѕРЅРѕРјРёС‡РµСЃРєРѕРµ'
+            WHEN 1 THEN 'РЎСЂРµРґРЅРµРµ СЃРїРµС†РёР°Р»СЊРЅРѕРµ'
+            WHEN 2 THEN 'Р’С‹СЃС€РµРµ С‚РµС…РЅРёС‡РµСЃРєРѕРµ'
+            WHEN 3 THEN 'Р’С‹СЃС€РµРµ РјР°С‚РµРјР°С‚РёС‡РµСЃРєРѕРµ'
+            WHEN 4 THEN 'Р’С‹СЃС€РµРµ РїРµРґР°РіРѕРіРёС‡РµСЃРєРѕРµ'
+        END
+    FROM sys.objects; -- РСЃРїРѕР»СЊР·СѓРµРј Р»СЋР±СѓСЋ С‚Р°Р±Р»РёС†Сѓ РґР»СЏ РіРµРЅРµСЂР°С†РёРё СЃС‚СЂРѕРєРё
+    
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @StaffRecords (FullName, PositionID, Education)
+    VALUES (@FullName, @PositionID, @Education);
+    
+    SET @StaffCounter = @StaffCounter + 1;
+END
+
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ Staff
 INSERT INTO Staff (FullName, PositionID, Education)
-VALUES 
-('Сергей Петров', 1, 'Среднее'),
-('Александр Смирнов', 1, 'Среднее'),
-('Дмитрий Соколов', 1, 'Высшее'),
-('Андрей Кузнецов', 1, 'Среднее'),
-('Михаил Попов', 1, 'Высшее'),
-('Алексей Волков', 1, 'Высшее'),
-('Николай Лебедев', 1, 'Среднее'),
-('Олег Семёнов', 1, 'Среднее'),
-('Владимир Павлов', 1, 'Высшее'),
-('Игорь Козлов', 1, 'Среднее'),
-('Максим Морозов', 1, 'Высшее'),
-('Артём Новиков', 1, 'Среднее'),
-('Евгений Беляев', 1, 'Высшее'),
-('Антон Ершов', 1, 'Среднее'),
-('Роман Фролов', 1, 'Высшее'),
-('Григорий Сафонов', 1, 'Среднее'),
-('Павел Гусев', 1, 'Среднее'),
-('Виктор Киселёв', 1, 'Высшее'),
-('Константин Фёдоров', 1, 'Среднее'),
-('Станислав Орлов', 1, 'Высшее');
+SELECT FullName, PositionID, Education FROM @StaffRecords;
 
+-- 5. Р’СЃС‚Р°РІРєР° Р°Р±РѕРЅРµРЅС‚РѕРІ РІ С‚Р°Р±Р»РёС†Сѓ Subscribers
 
--- Заполнение таблицы тарифных планов
-SET @i = 1;
-SET @MinSymbols = 5;
-SET @MaxSymbols = 15;
+DECLARE @SubscriberRecords TABLE (
+    FullName NVARCHAR(150),
+    HomeAddress NVARCHAR(255),
+    PassportData NVARCHAR(100)
+);
 
-WHILE @i <= @TariffPlanCount
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @SubscriberFirstName NVARCHAR(50);
+DECLARE @SubscriberLastName NVARCHAR(50);
+DECLARE @SubscriberMiddleName NVARCHAR(50);
+DECLARE @SubscriberFullName NVARCHAR(150);
+DECLARE @Street NVARCHAR(100);
+DECLARE @City NVARCHAR(100);
+DECLARE @HouseNumber INT;
+DECLARE @HomeAddress NVARCHAR(255);
+DECLARE @PassportSeries INT;
+DECLARE @PassportNumber INT;
+DECLARE @PassportData NVARCHAR(100);
+
+DECLARE @SubscriberTotal INT = 1000;
+DECLARE @SubscriberCounter INT = 1;
+
+WHILE @SubscriberCounter <= @SubscriberTotal
 BEGIN
-    -- Генерация случайного названия тарифного плана
-    SET @NameLimit = @MinSymbols + RAND() * (@MaxSymbols - @MinSymbols);
-    SET @TariffName = '';
-    WHILE LEN(@TariffName) < @NameLimit
-    BEGIN
-        SET @Position = RAND() * 52;
-        SET @TariffName = @TariffName + SUBSTRING(@Symbol, @Position, 1);
-    END;
+    -- Р’С‹Р±РѕСЂ СЃР»СѓС‡Р°Р№РЅРѕРіРѕ РёРјРµРЅРё
+    SELECT TOP 1 @SubscriberFirstName = Name FROM @FirstNames ORDER BY NEWID();
+    SELECT TOP 1 @SubscriberLastName = Name FROM @LastNames ORDER BY NEWID();
+    SELECT TOP 1 @SubscriberMiddleName = Name FROM @MiddleNames ORDER BY NEWID();
+    SET @SubscriberFullName = CONCAT(@SubscriberLastName, ' ', @SubscriberFirstName, ' ', @SubscriberMiddleName);
     
-    -- Вставка записи в таблицу тарифов
-    INSERT INTO TariffPlans (TariffName, SubscriptionFee, LocalCallRate, LongDistanceCallRate, InternationalCallRate, IsPerSecond, SmsRate, MmsRate, DataRatePerMB)
-    VALUES (@TariffName, RAND() * 100, RAND() * 2, RAND() * 5, RAND() * 10, CAST(ROUND(RAND(), 0) AS BIT), RAND() * 2, RAND() * 5, RAND() * 10);
+    -- Р“РµРЅРµСЂР°С†РёСЏ Р°РґСЂРµСЃР°
+    SELECT TOP 1 @Street = Name FROM @Streets ORDER BY NEWID();
+    SELECT TOP 1 @City = Name FROM @Cities ORDER BY NEWID();
+    SET @HouseNumber = (ABS(CHECKSUM(NEWID())) % 200) + 1;
+    SET @HomeAddress = CONCAT('Рі. ', @City, ', СѓР». ', @Street, ', Рґ. ', @HouseNumber);
     
-    SET @i = @i + 1;
-END;
+    -- Р“РµРЅРµСЂР°С†РёСЏ РїР°СЃРїРѕСЂС‚РЅС‹С… РґР°РЅРЅС‹С…
+    SET @PassportSeries = (ABS(CHECKSUM(NEWID())) % 9000) + 1000;
+    SET @PassportNumber = (ABS(CHECKSUM(NEWID())) % 900000) + 100000;
+    SET @PassportData = CONCAT(@PassportSeries, ' ', @PassportNumber);
+    
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @SubscriberRecords (FullName, HomeAddress, PassportData)
+    VALUES (@SubscriberFullName, @HomeAddress, @PassportData);
+    
+    SET @SubscriberCounter = @SubscriberCounter + 1;
+END
 
--- Заполнение таблицы абонентов
-SET @i = 1;
-SET @MinSymbols = 5;
-SET @MaxSymbols = 15;
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ Subscribers
+INSERT INTO Subscribers (FullName, HomeAddress, PassportData)
+SELECT FullName, HomeAddress, PassportData FROM @SubscriberRecords;
 
-WHILE @i <= @SubscriberCount
+-- 6. Р’СЃС‚Р°РІРєР° РґРѕРіРѕРІРѕСЂРѕРІ РІ С‚Р°Р±Р»РёС†Сѓ Contracts
+
+DECLARE @ContractRecords TABLE (
+    SubscriberID INT,
+    TariffPlanID INT,
+    ContractDate DATE,
+    ContractEndDate DATE,
+    PhoneNumber NVARCHAR(20),
+    StaffID INT
+);
+
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @SubscriberID INT;
+DECLARE @TariffPlanID INT;
+DECLARE @ContractDate DATE;
+DECLARE @HasEndDate BIT;
+DECLARE @ContractEndDate DATE;
+DECLARE @PhoneNumber NVARCHAR(20);
+DECLARE @ContractStaffID INT;
+
+DECLARE @ContractTotal INT = 1000;
+DECLARE @ContractCounter INT = 1;
+
+-- РџРѕР»СѓС‡Р°РµРј РјР°РєСЃРёРјР°Р»СЊРЅС‹Рµ ID РёР· СЃРІСЏР·Р°РЅРЅС‹С… С‚Р°Р±Р»РёС†
+DECLARE @MaxSubscriberID INT = (SELECT MAX(SubscriberID) FROM Subscribers);
+DECLARE @MaxTariffPlanID INT = (SELECT MAX(TariffPlanID) FROM TariffPlans);
+DECLARE @MaxStaffID INT = (SELECT MAX(StaffID) FROM Staff);
+
+WHILE @ContractCounter <= @ContractTotal
 BEGIN
-    -- Генерация случайных данных абонента
-    SET @NameLimit = @MinSymbols + RAND() * (@MaxSymbols - @MinSymbols);
-    SET @FullName = '';
-    SET @HomeAddress = '';
-    SET @PassportData = '';
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ SubscriberID Рё TariffPlanID
+    SET @SubscriberID = (ABS(CHECKSUM(NEWID())) % @MaxSubscriberID) + 1;
+    SET @TariffPlanID = (ABS(CHECKSUM(NEWID())) % @MaxTariffPlanID) + 1;
     
-    -- Генерация ФИО
-    WHILE LEN(@FullName) < @NameLimit
-    BEGIN
-        SET @Position = RAND() * 52;
-        SET @FullName = @FullName + SUBSTRING(@Symbol, @Position, 1);
-    END;
-
-    -- Генерация домашнего адреса
-    WHILE LEN(@HomeAddress) < @NameLimit + 5
-    BEGIN
-        SET @Position = RAND() * 52;
-        SET @HomeAddress = @HomeAddress + SUBSTRING(@Symbol, @Position, 1);
-    END;
-
-    -- Генерация паспортных данных
-    WHILE LEN(@PassportData) < 10
-    BEGIN
-        SET @Position = RAND() * 52;
-        SET @PassportData = @PassportData + SUBSTRING(@Symbol, @Position, 1);
-    END;
-
-    -- Вставка записи в таблицу абонентов
-    INSERT INTO Subscribers (FullName, HomeAddress, PassportData)
-    VALUES (@FullName, @HomeAddress, @PassportData);
-
-    SET @i = @i + 1;
-END;
-
--- Заполнение таблицы договоров
-SET @i = 1;
-
-WHILE @i <= @ContractCount
-BEGIN
-    -- Выбор случайного абонента и тарифного плана
-    SET @SubscriberID = CAST(1 + RAND() * (@SubscriberCount - 1) AS INT);
-    SET @TariffPlanID = CAST(1 + RAND() * (@TariffPlanCount - 1) AS INT);
+    -- Р“РµРЅРµСЂР°С†РёСЏ РґР°С‚ РґРѕРіРѕРІРѕСЂР°
+    SET @ContractDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE());
+    SET @HasEndDate = CASE WHEN (ABS(CHECKSUM(NEWID())) % 2) = 0 THEN 1 ELSE 0 END;
+    IF @HasEndDate = 1
+        SET @ContractEndDate = DATEADD(DAY, 365, @ContractDate);
+    ELSE
+        SET @ContractEndDate = NULL;
     
-    -- Выбор случайного сотрудника
-    SET @StaffID = CAST(1 + RAND() * (SELECT COUNT(*) FROM Staff) AS INT);
+    -- Р“РµРЅРµСЂР°С†РёСЏ С‚РµР»РµС„РѕРЅРЅРѕРіРѕ РЅРѕРјРµСЂР° (+7-XXX-XXX-XX-XX)
+    SET @PhoneNumber = CONCAT('+7-', 
+        CAST((ABS(CHECKSUM(NEWID())) % 900 + 100) AS NVARCHAR), '-', 
+        CAST((ABS(CHECKSUM(NEWID())) % 900 + 100) AS NVARCHAR), '-', 
+        CAST((ABS(CHECKSUM(NEWID())) % 90 + 10) AS NVARCHAR), '-', 
+        CAST((ABS(CHECKSUM(NEWID())) % 90 + 10) AS NVARCHAR));
     
-    -- Генерация уникального номера телефона
-    SET @PhoneNumber = '89' + CAST(CAST(RAND() * 1000000000 AS INT) AS NVARCHAR(10));
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ StaffID
+    SET @ContractStaffID = (ABS(CHECKSUM(NEWID())) % @MaxStaffID) + 1;
     
-    -- Генерация дат контракта
-    SET @ContractDate = DATEADD(DAY, -RAND() * 3650, GETDATE());  -- дата начала
-    SET @ContractEndDate = DATEADD(YEAR, 1 + RAND() * 5, @ContractDate); -- дата окончания
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @ContractRecords (SubscriberID, TariffPlanID, ContractDate, ContractEndDate, PhoneNumber, StaffID)
+    VALUES (@SubscriberID, @TariffPlanID, @ContractDate, @ContractEndDate, @PhoneNumber, @ContractStaffID);
+    
+    SET @ContractCounter = @ContractCounter + 1;
+END
 
-    -- Проверка на перекрытие контрактов для абонента
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM Contracts 
-        WHERE SubscriberID = @SubscriberID 
-          AND @ContractDate BETWEEN ContractDate AND ISNULL(ContractEndDate, GETDATE())
-    )
-    BEGIN
-        -- Вставка записи в таблицу договоров
-        INSERT INTO Contracts (SubscriberID, TariffPlanID, ContractDate, ContractEndDate, PhoneNumber, StaffID)
-        VALUES (@SubscriberID, @TariffPlanID, @ContractDate, @ContractEndDate, @PhoneNumber, @StaffID);
-        
-        SET @i = @i + 1;
-    END;
-END;
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ Contracts
+INSERT INTO Contracts (SubscriberID, TariffPlanID, ContractDate, ContractEndDate, PhoneNumber, StaffID)
+SELECT SubscriberID, TariffPlanID, ContractDate, ContractEndDate, PhoneNumber, StaffID FROM @ContractRecords;
 
+-- 7. Р’СЃС‚Р°РІРєР° Р·РІРѕРЅРєРѕРІ РІ С‚Р°Р±Р»РёС†Сѓ Calls
 
+DECLARE @CallRecords TABLE (
+    ContractID INT,
+    CallDate DATETIME,
+    CallDuration INT
+);
 
--- Заполнение таблицы звонков
-DECLARE @CallCount INT = 10000; -- количество записей о звонках
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @CallContractID INT;
 DECLARE @CallDate DATETIME;
 DECLARE @CallDuration INT;
 
-SET @i = 1;
-WHILE @i <= @CallCount
+DECLARE @CallTotal INT = 1000;
+DECLARE @CallCounter INT = 1;
+
+-- РџРѕР»СѓС‡Р°РµРј РјР°РєСЃРёРјРёР№ ContractID
+DECLARE @MaxContractIDCalls INT = (SELECT MAX(ContractID) FROM Contracts);
+
+WHILE @CallCounter <= @CallTotal
 BEGIN
-    -- Выбор случайного контракта
-    DECLARE @ContractID INT = CAST(1 + RAND() * (SELECT COUNT(*) FROM Contracts) AS INT);
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ ContractID
+    SET @CallContractID = (ABS(CHECKSUM(NEWID())) % @MaxContractIDCalls) + 1;
     
-    -- Получение даты начала и окончания контракта
-    SELECT @ContractDate = ContractDate, @ContractEndDate = ContractEndDate
-    FROM Contracts
-    WHERE ContractID = @ContractID;
-
-    -- Генерация случайной даты звонка в пределах действия контракта
-    SET @CallDate = DATEADD(DAY, CAST(RAND() * DATEDIFF(DAY, @ContractDate, ISNULL(@ContractEndDate, GETDATE())) AS INT), @ContractDate);
+    -- Р“РµРЅРµСЂР°С†РёСЏ РґР°С‚С‹ Рё РІСЂРµРјРµРЅРё Р·РІРѕРЅРєР° Р·Р° РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ
+    SET @CallDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()) 
+                  + CAST(ABS(CHECKSUM(NEWID())) % 86400 AS FLOAT) / 86400.0;
     
-    -- Генерация случайной длительности звонка (в секундах)
-    SET @CallDuration = CAST(1 + RAND() * 3600 AS INT); -- до 1 часа
+    -- Р“РµРЅРµСЂР°С†РёСЏ РїСЂРѕРґРѕР»Р¶РёС‚РµР»СЊРЅРѕСЃС‚Рё Р·РІРѕРЅРєР° (1 - 3600 СЃРµРєСѓРЅРґ)
+    SET @CallDuration = (ABS(CHECKSUM(NEWID())) % 3600) + 1;
+    
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @CallRecords (ContractID, CallDate, CallDuration)
+    VALUES (@CallContractID, @CallDate, @CallDuration);
+    
+    SET @CallCounter = @CallCounter + 1;
+END
 
-    -- Вставка записи в таблицу звонков
-    INSERT INTO Calls (ContractID, CallDate, CallDuration)
-    VALUES (@ContractID, @CallDate, @CallDuration);
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ Calls
+INSERT INTO Calls (ContractID, CallDate, CallDuration)
+SELECT ContractID, CallDate, CallDuration FROM @CallRecords;
 
-    SET @i = @i + 1;
-END;
+-- 8. Р’СЃС‚Р°РІРєР° СЃРѕРѕР±С‰РµРЅРёР№ РІ С‚Р°Р±Р»РёС†Сѓ Messages
 
--- Заполнение таблицы сообщений
-DECLARE @MessageCount INT = 5000; -- количество записей о сообщениях
+DECLARE @MessageRecords TABLE (
+    ContractID INT,
+    MessageDate DATETIME,
+    IsMMS BIT
+);
+
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @MessageContractID INT;
 DECLARE @MessageDate DATETIME;
 DECLARE @IsMMS BIT;
 
-SET @i = 1;
-WHILE @i <= @MessageCount
+DECLARE @MessageTotal INT = 1000;
+DECLARE @MessageCounter INT = 1;
+
+DECLARE @MaxContractIDMessages INT = (SELECT MAX(ContractID) FROM Contracts);
+
+WHILE @MessageCounter <= @MessageTotal
 BEGIN
-    -- Выбор случайного контракта
-    SET @ContractID = CAST(1 + RAND() * (SELECT COUNT(*) FROM Contracts) AS INT);
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ ContractID
+    SET @MessageContractID = (ABS(CHECKSUM(NEWID())) % @MaxContractIDMessages) + 1;
     
-    -- Получение даты начала и окончания контракта
-    SELECT @ContractDate = ContractDate, @ContractEndDate = ContractEndDate
-    FROM Contracts
-    WHERE ContractID = @ContractID;
-
-    -- Генерация случайной даты сообщения в пределах действия контракта
-    SET @MessageDate = DATEADD(DAY, CAST(RAND() * DATEDIFF(DAY, @ContractDate, ISNULL(@ContractEndDate, GETDATE())) AS INT), @ContractDate);
+    -- Р“РµРЅРµСЂР°С†РёСЏ РґР°С‚С‹ Рё РІСЂРµРјРµРЅРё СЃРѕРѕР±С‰РµРЅРёСЏ Р·Р° РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ
+    SET @MessageDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()) 
+                     + CAST(ABS(CHECKSUM(NEWID())) % 86400 AS FLOAT) / 86400.0;
     
-    -- Генерация типа сообщения (SMS или MMS)
-    SET @IsMMS = CAST(ROUND(RAND(), 0) AS BIT);
+    -- РћРїСЂРµРґРµР»РµРЅРёРµ, MMS СЌС‚Рѕ РёР»Рё SMS
+    SET @IsMMS = CASE WHEN (ABS(CHECKSUM(NEWID())) % 2) = 0 THEN 0 ELSE 1 END;
+    
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @MessageRecords (ContractID, MessageDate, IsMMS)
+    VALUES (@MessageContractID, @MessageDate, @IsMMS);
+    
+    SET @MessageCounter = @MessageCounter + 1;
+END
 
-    -- Вставка записи в таблицу сообщений
-    INSERT INTO Messages (ContractID, MessageDate, IsMMS)
-    VALUES (@ContractID, @MessageDate, @IsMMS);
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ Messages
+INSERT INTO Messages (ContractID, MessageDate, IsMMS)
+SELECT ContractID, MessageDate, IsMMS FROM @MessageRecords;
 
-    SET @i = @i + 1;
-END;
+-- 9. Р’СЃС‚Р°РІРєР° РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёРЅС‚РµСЂРЅРµС‚Р° РІ С‚Р°Р±Р»РёС†Сѓ InternetUsage
 
--- Заполнение таблицы использования интернета
-DECLARE @UsageCount INT = 10000; -- количество записей о трафике
+DECLARE @InternetUsageRecords TABLE (
+    ContractID INT,
+    UsageDate DATETIME,
+    DataSentMB DECIMAL(10,2),
+    DataReceivedMB DECIMAL(10,2)
+);
+
+-- РћР±СЉСЏРІР»СЏРµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РѕРґРёРЅ СЂР°Р·
+DECLARE @InternetContractID INT;
 DECLARE @UsageDate DATETIME;
-DECLARE @DataSentMB DECIMAL(10, 2);
-DECLARE @DataReceivedMB DECIMAL(10, 2);
+DECLARE @DataSentMB DECIMAL(10,2);
+DECLARE @DataReceivedMB DECIMAL(10,2);
 
-SET @i = 1;
-WHILE @i <= @UsageCount
+DECLARE @InternetUsageTotal INT = 1000;
+DECLARE @InternetUsageCounter INT = 1;
+
+DECLARE @MaxContractIDInternet INT = (SELECT MAX(ContractID) FROM Contracts);
+
+WHILE @InternetUsageCounter <= @InternetUsageTotal
 BEGIN
-    -- Выбор случайного контракта
-    SET @ContractID = CAST(1 + RAND() * (SELECT COUNT(*) FROM Contracts) AS INT);
+    -- РЎР»СѓС‡Р°Р№РЅС‹Р№ ContractID
+    SET @InternetContractID = (ABS(CHECKSUM(NEWID())) % @MaxContractIDInternet) + 1;
     
-    -- Получение даты начала и окончания контракта
-    SELECT @ContractDate = ContractDate, @ContractEndDate = ContractEndDate
-    FROM Contracts
-    WHERE ContractID = @ContractID;
-
-    -- Генерация случайной даты использования интернета в пределах действия контракта
-    SET @UsageDate = DATEADD(DAY, CAST(RAND() * DATEDIFF(DAY, @ContractDate, ISNULL(@ContractEndDate, GETDATE())) AS INT), @ContractDate);
+    -- Р“РµРЅРµСЂР°С†РёСЏ РґР°С‚С‹ Рё РІСЂРµРјРµРЅРё РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ РёРЅС‚РµСЂРЅРµС‚Р° Р·Р° РїРѕСЃР»РµРґРЅРёР№ РіРѕРґ
+    SET @UsageDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 365, GETDATE()) 
+                  + CAST(ABS(CHECKSUM(NEWID())) % 86400 AS FLOAT) / 86400.0;
     
-    -- Генерация случайного объема данных
-    SET @DataSentMB = ROUND(RAND() * 500, 2); -- до 500 MB
-    SET @DataReceivedMB = ROUND(RAND() * 500, 2); -- до 500 MB
+    -- Р“РµРЅРµСЂР°С†РёСЏ РѕР±СЉС‘РјР° РѕС‚РїСЂР°РІР»РµРЅРЅС‹С… Рё РїРѕР»СѓС‡РµРЅРЅС‹С… РґР°РЅРЅС‹С… (РґРѕ 500 РњР‘)
+    SET @DataSentMB = CAST((ABS(CHECKSUM(NEWID())) % 5000) AS DECIMAL(10,2)) / 10.0; -- 0.00 - 500.00
+    SET @DataReceivedMB = CAST((ABS(CHECKSUM(NEWID())) % 10000) AS DECIMAL(10,2)) / 10.0; -- 0.00 - 1000.00
+    
+    -- Р’СЃС‚Р°РІРєР° Р·Р°РїРёСЃРё РІ РІСЂРµРјРµРЅРЅСѓСЋ С‚Р°Р±Р»РёС†Сѓ
+    INSERT INTO @InternetUsageRecords (ContractID, UsageDate, DataSentMB, DataReceivedMB)
+    VALUES (@InternetContractID, @UsageDate, @DataSentMB, @DataReceivedMB);
+    
+    SET @InternetUsageCounter = @InternetUsageCounter + 1;
+END
 
-    -- Вставка записи в таблицу использования интернета
-    INSERT INTO InternetUsage (ContractID, UsageDate, DataSentMB, DataReceivedMB)
-    VALUES (@ContractID, @UsageDate, @DataSentMB, @DataReceivedMB);
+-- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Сѓ InternetUsage
+INSERT INTO InternetUsage (ContractID, UsageDate, DataSentMB, DataReceivedMB)
+SELECT ContractID, UsageDate, DataSentMB, DataReceivedMB FROM @InternetUsageRecords;
 
-    SET @i = @i + 1;
-END;
-
-
--- Количество записей в таблице StaffPosition
-SELECT 'StaffPosition' AS TableName, COUNT(*) AS RecordCount
-FROM StaffPosition;
-
--- Количество записей в таблице Staff
-SELECT 'Staff' AS TableName, COUNT(*) AS RecordCount
-FROM Staff;
-
--- Количество записей в таблице TariffPlans
-SELECT 'TariffPlans' AS TableName, COUNT(*) AS RecordCount
-FROM TariffPlans;
-
--- Количество записей в таблице Subscribers
-SELECT 'Subscribers' AS TableName, COUNT(*) AS RecordCount
-FROM Subscribers;
-
--- Количество записей в таблице Contracts
-SELECT 'Contracts' AS TableName, COUNT(*) AS RecordCount
-FROM Contracts;
-
--- Количество записей в таблице Calls
-SELECT 'Calls' AS TableName, COUNT(*) AS RecordCount
-FROM Calls;
-
--- Количество записей в таблице Messages
-SELECT 'Messages' AS TableName, COUNT(*) AS RecordCount
-FROM Messages;
-
--- Количество записей в таблице InternetUsage
-SELECT 'InternetUsage' AS TableName, COUNT(*) AS RecordCount
-FROM InternetUsage;
+-- 10. Р—Р°РІРµСЂС€РµРЅРёРµ РїСЂРѕС†РµСЃСЃР°
+PRINT 'Р—Р°РїРѕР»РЅРµРЅРёРµ С‚Р°Р±Р»РёС† Р·Р°РІРµСЂС€РµРЅРѕ СѓСЃРїРµС€РЅРѕ.';
