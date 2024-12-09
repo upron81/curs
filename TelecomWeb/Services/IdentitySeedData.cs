@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
-using System;
 using TelecomWeb.Data;
 
 namespace TelecomWeb.Services

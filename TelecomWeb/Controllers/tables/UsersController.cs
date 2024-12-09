@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading.Tasks;
 using TelecomWeb.Data;
 using TelecomWeb.Models;
 
 namespace TelecomWeb.Controllers
 {
-    [Authorize(Roles = "admin")]  
+    [Authorize(Roles = "admin")]
     public class UsersController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;

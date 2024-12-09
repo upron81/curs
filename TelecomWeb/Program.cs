@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using TelecomWeb.Middleware;
 using TelecomWeb.Models;
 using TelecomWeb.Services;
@@ -54,7 +53,7 @@ namespace TelecomWeb
             app.UseRouting();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>{endpoints.MapRazorPages();});
+            app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
 
             app.MapControllerRoute(
                 name: "default",

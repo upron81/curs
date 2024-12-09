@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace TelecomWeb.Models;

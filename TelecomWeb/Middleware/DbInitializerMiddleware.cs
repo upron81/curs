@@ -1,9 +1,4 @@
 ﻿using TelecomWeb.Data;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TelecomWeb.Models;
 
 namespace TelecomWeb.Middleware

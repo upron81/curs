@@ -1,8 +1,6 @@
-﻿using TelecomWeb.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Text;
+using TelecomWeb.Models;
 
 namespace TelecomWeb.Data
 {
