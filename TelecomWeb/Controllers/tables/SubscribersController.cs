@@ -80,6 +80,7 @@ namespace TelecomWeb.Controllers.tables
             if (startDateOnly.HasValue && endDateOnly.HasValue)
             {
                 subscribers = subscribers.Where(s =>
+                    s.Contracts.Any() &&
                     s.Contracts.All(c => c.ContractDate >= startDateOnly && c.ContractDate <= endDateOnly));
             }
 
