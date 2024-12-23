@@ -1,8 +1,13 @@
-﻿@{
+﻿@using TelecomWeb.Data;
+@{
     ViewData["Title"] = "Домашняя страница";
 }
 
 <div class="text-center">
     <h1 class="display-4">Добро пожаловать</h1>
-    <p><a href="/Identity/Account/Login">Войдите</a>, чтобы использовать</p>
+
+    @if (!(User.IsInRole(Role.admin.ToString()) || User.IsInRole(Role.manager.ToString())))
+    {
+        <p><a href="/Identity/Account/Login">Войдите</a>, чтобы использовать</p>
+    }
 </div>
