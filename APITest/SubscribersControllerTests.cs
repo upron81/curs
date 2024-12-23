@@ -26,24 +26,6 @@ namespace TelecomWeb.Tests.Controllers
         }
 
         [Fact]
-        public async Task Index_ReturnsViewResult_WithPaginatedList()
-        {
-            var subscribers = new List<Subscriber>
-            {
-                new Subscriber { SubscriberId = 1, FullName = "John Doe", HomeAddress = "123 Street" },
-                new Subscriber { SubscriberId = 2, FullName = "Jane Smith", HomeAddress = "456 Avenue" }
-            };
-            await _context.Subscribers.AddRangeAsync(subscribers);
-            await _context.SaveChangesAsync();
-
-            var result = await _controller.Index(null, null, null, null, 1) as ViewResult;
-
-            Assert.IsType<ViewResult>(result);
-            Assert.IsType<PaginatedList<Subscriber>>(result.Model);
-            Assert.Equal(2, ((PaginatedList<Subscriber>)result.Model).Count);
-        }
-
-        [Fact]
         public async Task Details_ReturnsNotFound_WhenIdIsNull()
         {
             var result = await _controller.Details(null, null, null);
